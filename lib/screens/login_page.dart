@@ -35,7 +35,7 @@ class _LoginState extends ConsumerState<LoginPage> {
           'uid': user.uid,
           'username': 'anonymous',
           'tables': [],
-          'cuisines': [],
+          'cuisines': {},
         }
       );
     }
