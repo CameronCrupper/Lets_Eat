@@ -43,7 +43,7 @@ class _WebAuthProvider implements AuthProviderBase {
     return FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password
-      );
+    );
   }
 }
 
