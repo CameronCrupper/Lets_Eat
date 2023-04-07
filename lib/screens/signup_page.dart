@@ -19,17 +19,17 @@ class SignUpPage extends ConsumerStatefulWidget {
 }
 
 class _SignUpState extends ConsumerState<SignUpPage> {
-  // Text field controllers
+  // TEXT FIELD CONTROLLERS
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
 
-  // Text field content variables
+  // TEXT FIELD CONTENT VARIABLES
   String _email = '';
   String _password = '';
   String _username = '';
 
-  // Text field validation
+  // TEXT FIELD VALIDATION
   bool _emailIsValid = false;
   bool _validateEmail(String value) {
     // Returns false unless value evaluates as true per the
@@ -209,11 +209,13 @@ class _SignUpState extends ConsumerState<SignUpPage> {
               ),
             ),
             // PASSWORD TEXT INSTRUCTIONS
-            Text('Password must contain; 1 capital letter, 1 lowercase letter, 1 number,\n1 special character, & at least 8 characters long',
+            Text('''Password must contain; 1 capital letter, 1 lowercase letter,
+             1 number,\n1 special character, & be at least 8 characters long''',
               style: TextStyle(
                 fontSize: 12,
                 color: _passwordIsValid ? Colors.green : Colors.red,
               ),
+              textAlign: TextAlign.center,
             ),
             // SIGN UP BUTTON
             Padding(
