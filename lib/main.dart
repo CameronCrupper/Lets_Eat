@@ -1,19 +1,17 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'screens/splash.dart';
 import 'screens/home_page.dart';
 
 import 'auth/stub.dart'
-  if (dart.library.io) 'auth/android_auth_provider.dart'
-  if (dart.library.html) 'auth/web_auth_provider.dart';
+    if (dart.library.io) 'auth/android_auth_provider.dart'
+    if (dart.library.html) 'auth/web_auth_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AuthProvider().initialize();
-  runApp(const ProviderScope(
-    child: MyApp()
-    )
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +26,32 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      // https://pub.dev/packages/animated_splash_screen/example
+      // documentation for using animation on splash screen
+      home: AnimatedSplashScreen(
+          splash: Image.asset('assets/images/Lets-Eat.png'),
+          duration: 3000,
+          splashTransition: SplashTransition.fadeTransition,
+          backgroundColor: Colors.lightGreen.shade600,
+          nextScreen: HomePage()),
+      // splash: Center(
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: [
+      //       // container for image to be used
+      //       Container(
+      //         height: 100,
+      //         width: 100,
+      //         color: Colors.blue,
+      //       ),
+      //       //can be removed or changed if needed
+      //       Container(
+      //           child: Text('Splash Screen',
+      //               style: TextStyle(
+      //                   fontSize: 24, fontWeight: FontWeight.bold))),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }
