@@ -68,14 +68,16 @@ class _SignUpState extends ConsumerState<SignUpPage> {
     super.dispose();
   }
 
+  // 
   void _addUser() async {
     final user = FirebaseAuth.instance.currentUser;
-    await FirebaseFirestore.instance.collection('users').doc(_username).set(
+    await FirebaseFirestore.instance.collection('users').doc(user!.uid).set(
         {
-          'uid': user!.uid,
-          'username': 'anonymous',
+          'uid': user.uid,
+          'username': _username,
           'tables': [],
-          'cuisines': [],
+          'preferences': {},
+          'friends': []
         }
       );
   }
@@ -92,7 +94,7 @@ class _SignUpState extends ConsumerState<SignUpPage> {
       } catch (e) {
         log('User creation failed: $e');
       }
-      Future.delayed(const Duration(milliseconds: 500), () async {
+      Future.delayed(const Duration(seconds: 1), () async {
         try {
           await AuthProvider().signInWithEmail(
           _email,
@@ -232,8 +234,8 @@ class _SignUpState extends ConsumerState<SignUpPage> {
                     borderRadius: BorderRadius.circular(20)),
                 child: TextButton(
                   onPressed: _usernameIsValid &&
-                              _emailIsValid &&
-                              _passwordIsValid
+                             _emailIsValid &&
+                             _passwordIsValid
                               ? () {
                                   _signUp();
                                 }

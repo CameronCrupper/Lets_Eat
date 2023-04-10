@@ -17,6 +17,7 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginState extends ConsumerState<LoginPage> {
+  //  TEXT FIELD CONTROLLERS
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -33,9 +34,10 @@ class _LoginState extends ConsumerState<LoginPage> {
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
         {
           'uid': user.uid,
-          'username': 'anonymous',
+          'username': 'anonymous_${user.uid}',
           'tables': [],
-          'cuisines': {},
+          'preferences': {},
+          'friends': []
         }
       );
     }
@@ -83,14 +85,10 @@ class _LoginState extends ConsumerState<LoginPage> {
                 child: SizedBox(
                     width: 200,
                     height: 150,
-                    /*decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(50.0)),*/
                     child: Image.asset('assets/images/Lets-Eat.png')),
               ),
             ),
             Padding(
-              //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
               padding: const  EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
                 decoration: const InputDecoration(
@@ -103,7 +101,6 @@ class _LoginState extends ConsumerState<LoginPage> {
             Padding(
               padding: const EdgeInsets.only(
                   left: 15.0, right: 15.0, top: 15, bottom: 0),
-              //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
                 obscureText: true,
                 decoration: const InputDecoration(
@@ -148,7 +145,6 @@ class _LoginState extends ConsumerState<LoginPage> {
               },
               child: const Text(
                 'Forgot Password',
-                // style: TextStyle(color: Colors.blue, fontSize: 15),
               ),
             ),
             Container(
@@ -166,6 +162,7 @@ class _LoginState extends ConsumerState<LoginPage> {
                 ),
               ),
             ),
+            // GOOGLE SIGN IN BUTTON
             SignInButton(
                 Buttons.Google,
                 padding: const EdgeInsets.all(5),
