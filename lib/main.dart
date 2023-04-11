@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Let's Eat",
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
@@ -28,30 +29,39 @@ class MyApp extends StatelessWidget {
       ),
       // https://pub.dev/packages/animated_splash_screen/example
       // documentation for using animation on splash screen
-      home: AnimatedSplashScreen(
-          splash: Image.asset('assets/images/Lets-Eat.png'),
-          duration: 3000,
-          splashTransition: SplashTransition.fadeTransition,
-          backgroundColor: Colors.lightGreen.shade600,
-          nextScreen: HomePage()),
-      // splash: Center(
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: [
-      //       // container for image to be used
-      //       Container(
-      //         height: 100,
-      //         width: 100,
-      //         color: Colors.blue,
-      //       ),
-      //       //can be removed or changed if needed
-      //       Container(
-      //           child: Text('Splash Screen',
-      //               style: TextStyle(
-      //                   fontSize: 24, fontWeight: FontWeight.bold))),
-      //     ],
-      //   ),
-      // ),
+//       home: AnimatedSplashScreen(
+//         // splash: Image.asset(
+//         //   'assets/images/Logo.png',
+//         // ),
+//         // duration: 3000,
+//         // splashTransition: SplashTransition.fadeTransition,
+//         // backgroundColor: Colors.lightGreen.shade600,
+//         // nextScreen: const HomePage()),
+//         splash: Center(
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               // container for image to be used
+//               SingleChildScrollView(
+//                 child: Image.asset(
+//                   'assets/images/Logo1.png',
+//                   height: 500,
+//                   width: 500,
+//                 ),
+//                 // height: 500,
+//                 // width: 500,
+//                 // color: Colors.blue,
+//               ),
+//               //can be removed or changed if needed
+//               // Container(
+//               //     child: Text('Splash Screen',
+//               //         style: TextStyle(
+//               //             fontSize: 24, fontWeight: FontWeight.bold))),
+//             ],
+//           ),
+//         ),
+//         nextScreen: HomePage(),
+//       ),
     );
   }
 }
