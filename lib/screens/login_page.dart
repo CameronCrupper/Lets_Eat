@@ -31,15 +31,13 @@ class _LoginState extends ConsumerState<LoginPage> {
   void _addUser() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
-        {
-          'uid': user.uid,
-          'username': 'anonymous_${user.uid}',
-          'tables': [],
-          'preferences': {},
-          'friends': []
-        }
-      );
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'uid': user.uid,
+        'username': 'anonymous_${user.uid}',
+        'tables': [],
+        'preferences': {},
+        'friends': []
+      });
     }
   }
 
@@ -47,13 +45,15 @@ class _LoginState extends ConsumerState<LoginPage> {
     try {
       await AuthProvider().signInWithGoogle();
       final userUid = FirebaseAuth.instance.currentUser!.uid;
-      final checkForUser = await FirebaseFirestore.instance.collection('users')
-        .doc(userUid).get();
+      final checkForUser = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userUid)
+          .get();
       if (checkForUser.data() == null) {
         _addUser();
       }
       ref.read(signedInProvider.notifier).state = true;
-    } catch(e) {
+    } catch (e) {
       log('Login Failed: $e');
     }
   }
@@ -61,10 +61,9 @@ class _LoginState extends ConsumerState<LoginPage> {
   void _emailSignIn() async {
     try {
       await AuthProvider().signInWithEmail(
-        _emailController.text.trim(),
-        _passwordController.text.trim());
-        ref.read(signedInProvider.notifier).state = true;
-    } catch(e) {
+          _emailController.text.trim(), _passwordController.text.trim());
+      ref.read(signedInProvider.notifier).state = true;
+    } catch (e) {
       log('Login Failed: $e');
     }
   }
@@ -72,30 +71,42 @@ class _LoginState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text("Login Page"),
-      ),
-      body: SingleChildScrollView(
+      backgroundColor: Colors.lightGreen.shade600,
+      // appBar: AppBar(
+      //   title: const Text("Login Page"),
+      // ),
+      body: SizedBox(
+        width: double.infinity,
         child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: Center(
-                child: SizedBox(
-                    width: 200,
-                    height: 150,
-                    child: Image.asset('assets/images/Lets-Eat.png')),
-              ),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image(
+              image: AssetImage('assets/images/LetsEatLogo.png'),
+              width: 200,
             ),
+            // SizedBox(
+            //   height: 50,
+            // ),
+            // body: SingleChildScrollView(
+            //   child: Column(
+            //     children: <Widget>[
+            //       Padding(
+            //         padding: const EdgeInsets.only(top: 10.0),
+            //         child: Center(
+            //           child: SizedBox(
+            //               width: 700,
+            //               height: 400,
+            //               child: Image.asset('assets/images/LetsEatLogo.png')),
+            //         ),
+            //       ),
             Padding(
-              padding: const  EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
                     hintText: 'Enter valid email'),
-                    controller: _emailController,
+                controller: _emailController,
               ),
             ),
             Padding(
@@ -107,7 +118,7 @@ class _LoginState extends ConsumerState<LoginPage> {
                     border: OutlineInputBorder(),
                     labelText: 'Password',
                     hintText: 'Enter password'),
-                    controller: _passwordController,
+                controller: _passwordController,
               ),
             ),
             Row(
@@ -115,43 +126,34 @@ class _LoginState extends ConsumerState<LoginPage> {
               children: [
                 const Text(
                   'New User?  ',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 15
-                  ),
+                  style: TextStyle(color: Colors.black, fontSize: 15),
                 ),
                 InkWell(
-                  child: const Text(
-                    'Create Account',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 15
-                    )
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignUpPage()
-                      )
-                    );
-                  }
-                )
+                    child: const Text('Create Account',
+                        style: TextStyle(color: Colors.black, fontSize: 15)),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignUpPage()));
+                    })
               ],
             ),
-            TextButton(
-              onPressed: () {
-                //TODO FORGOT PASSWORD SCREEN GOES HERE
-              },
-              child: const Text(
-                'Forgot Password',
-              ),
-            ),
+            // TextButton(
+            //   onPressed: () {
+            //     //TODO FORGOT PASSWORD SCREEN GOES HERE
+            //   },
+            //   // child: const Text(
+            //   //   'Forgot Password',
+
+            //   // ),
+            // ),
             Container(
               height: 50,
               width: 250,
               decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.circular(20)),
               child: TextButton(
                 onPressed: () {
                   _emailSignIn();
@@ -164,10 +166,10 @@ class _LoginState extends ConsumerState<LoginPage> {
             ),
             // GOOGLE SIGN IN BUTTON
             SignInButton(
-                Buttons.Google,
-                padding: const EdgeInsets.all(5),
-                onPressed: _googleSignIn,
-              ),
+              Buttons.Google,
+              padding: const EdgeInsets.all(15),
+              onPressed: _googleSignIn,
+            ),
             const SizedBox(
               height: 130,
             ),

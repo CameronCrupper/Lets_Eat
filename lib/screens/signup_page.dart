@@ -8,8 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../providers/signed_in.dart';
 import '../auth/stub.dart'
-  if (dart.library.io) '../auth/android_auth_provider.dart'
-  if (dart.library.html) '../auth/web_auth_provider.dart';
+    if (dart.library.io) '../auth/android_auth_provider.dart'
+    if (dart.library.html) '../auth/web_auth_provider.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -68,23 +68,23 @@ class _SignUpState extends ConsumerState<SignUpPage> {
     super.dispose();
   }
 
-  // 
+  //
   void _addUser() async {
     final user = FirebaseAuth.instance.currentUser;
-    await FirebaseFirestore.instance.collection('users').doc(user!.uid).set(
-        {
-          'uid': user.uid,
-          'username': _username,
-          'tables': [],
-          'preferences': {},
-          'friends': []
-        }
-      );
+    await FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
+      'uid': user.uid,
+      'username': _username,
+      'tables': [],
+      'preferences': {},
+      'friends': []
+    });
   }
 
   void _signUp() async {
-    final checkForUser = await FirebaseFirestore.instance.collection('users')
-        .doc(_username).get();
+    final checkForUser = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(_username)
+        .get();
     if (checkForUser.data() == null) {
       try {
         AuthProvider().signUpWithEmail(
@@ -96,21 +96,14 @@ class _SignUpState extends ConsumerState<SignUpPage> {
       }
       Future.delayed(const Duration(seconds: 1), () async {
         try {
-          await AuthProvider().signInWithEmail(
-          _email,
-          _password
-          );
+          await AuthProvider().signInWithEmail(_email, _password);
         } catch (e) {
           log('Login failed: $e');
         }
         ref.read(signedInProvider.notifier).state = true;
         _addUser();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const ProfilePage()
-          )
-        );
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ProfilePage()));
       });
     } else {
       log('Cannot create account: User already exists with that username.');
@@ -120,7 +113,7 @@ class _SignUpState extends ConsumerState<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.white60,
       appBar: AppBar(
         title: const Text("Sign Up Page"),
       ),
@@ -133,16 +126,15 @@ class _SignUpState extends ConsumerState<SignUpPage> {
               padding: const EdgeInsets.only(top: 60.0),
               child: Center(
                 child: SizedBox(
-                    width: 200,
-                    height: 150,
-                    child: Image.asset('assets/images/Lets-Eat.png')),
+                    width: 300,
+                    height: 200,
+                    child: Image.asset('assets/images/LetsEatLogo.png')),
               ),
             ),
             // USERNAME TEXT FIELD
             Padding(
               padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 20, bottom: 10
-              ),
+                  left: 15.0, right: 15.0, top: 20, bottom: 10),
               child: TextField(
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -158,7 +150,8 @@ class _SignUpState extends ConsumerState<SignUpPage> {
               ),
             ),
             // USERNAME TEXT INSTRUCTIONS
-            Text('Username must be between 3 and 20 characters long',
+            Text(
+              'Username must be between 3 and 20 characters long',
               style: TextStyle(
                 fontSize: 12,
                 color: _usernameIsValid ? Colors.green : Colors.red,
@@ -167,8 +160,7 @@ class _SignUpState extends ConsumerState<SignUpPage> {
             // EMAIL TEXT FIELD
             Padding(
               padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 10, bottom: 10
-              ),
+                  left: 15.0, right: 15.0, top: 10, bottom: 10),
               child: TextField(
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -184,7 +176,8 @@ class _SignUpState extends ConsumerState<SignUpPage> {
               ),
             ),
             // EMAIL TEXT INSTRUCTIONS
-            Text('Email must be valid email format',
+            Text(
+              'Email must be valid email format',
               style: TextStyle(
                 fontSize: 12,
                 color: _emailIsValid ? Colors.green : Colors.red,
@@ -193,8 +186,7 @@ class _SignUpState extends ConsumerState<SignUpPage> {
             // PASSWORD TEXT FIELD
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 10, bottom: 10
-                ),
+                  left: 15.0, right: 15.0, top: 10, bottom: 10),
               child: TextField(
                 obscureText: true,
                 decoration: const InputDecoration(
@@ -211,7 +203,8 @@ class _SignUpState extends ConsumerState<SignUpPage> {
               ),
             ),
             // PASSWORD TEXT INSTRUCTIONS
-            Text('''Password must contain; 1 capital letter, 1 lowercase letter,
+            Text(
+              '''Password must contain; 1 capital letter, 1 lowercase letter,
              1 number,\n1 special character, & be at least 8 characters long''',
               style: TextStyle(
                 fontSize: 12,
@@ -226,22 +219,20 @@ class _SignUpState extends ConsumerState<SignUpPage> {
                 height: 50,
                 width: 250,
                 decoration: BoxDecoration(
-                    color: !_usernameIsValid ||
-                            !_emailIsValid ||
-                            !_passwordIsValid
+                    color:
+                        !_usernameIsValid || !_emailIsValid || !_passwordIsValid
                             ? Colors.blueGrey
-                            : Colors.blue, 
+                            : Colors.blue,
                     borderRadius: BorderRadius.circular(20)),
                 child: TextButton(
-                  onPressed: _usernameIsValid &&
-                             _emailIsValid &&
-                             _passwordIsValid
-                              ? () {
-                                  _signUp();
-                                }
-                              : () {
-                                  // Do nothing
-                                },
+                  onPressed:
+                      _usernameIsValid && _emailIsValid && _passwordIsValid
+                          ? () {
+                              _signUp();
+                            }
+                          : () {
+                              // Do nothing
+                            },
                   child: const Text(
                     'Sign Up',
                     style: TextStyle(color: Colors.white, fontSize: 25),
