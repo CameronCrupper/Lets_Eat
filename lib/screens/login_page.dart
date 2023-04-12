@@ -6,8 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lets_eat/screens/signup_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../auth/web_auth_provider.dart';
+import '../default_data/preferences.dart';
 import '../providers/signed_in.dart';
+import '../auth/stub.dart'
+    if (dart.library.io) '../auth/android_auth_provider.dart'
+    if (dart.library.html) '../auth/web_auth_provider.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -33,9 +36,9 @@ class _LoginState extends ConsumerState<LoginPage> {
     if (user != null) {
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
         'uid': user.uid,
-        'username': 'anonymous_${user.uid}',
+        'username': 'anonymous_${user.uid.substring(0,6)}',
         'tables': [],
-        'preferences': {},
+        'preferences': defaultPreferences,
         'friends': []
       });
     }
@@ -80,7 +83,7 @@ class _LoginState extends ConsumerState<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(
+            const Image(
               image: AssetImage('assets/images/LetsEatLogo.png'),
               width: 200,
             ),

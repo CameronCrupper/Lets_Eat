@@ -21,6 +21,23 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
     return currentUser;
   }
 
+  // Future<List<String>> getUserFriends() async {
+  //   await Future.delayed(const Duration(seconds: 1));
+  //   List<String> friendList = [];
+  //   final user = FirebaseAuth.instance.currentUser;
+  //   final currentUser = await FirebaseFirestore.instance.collection('users')
+  //     .doc(user!.uid).get();
+  //   for (var friend in currentUser.data()!['friends']) {
+  //     final currentFriend = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(friend).get();
+  //     friendList.add(
+  //       currentFriend.data()!['username']
+  //     );
+  //   }
+  //   return friendList;
+  // }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -44,7 +61,9 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
                 child: ListView.builder(
                 itemCount: snapshot.data!.data()?['friends'].length,
                 itemBuilder: (context, index) {
-                  return Text('${snapshot.data!.data()?['friends'][index]}');
+                  return Text(
+                    '${snapshot.data!.data()?['friends'][index]}'
+                    );
                 })
               )
             ],
