@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lets_eat/screens/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../default_data/preferences.dart';
 import '../providers/signed_in.dart';
 import '../auth/stub.dart'
     if (dart.library.io) '../auth/android_auth_provider.dart'
@@ -75,7 +76,7 @@ class _SignUpState extends ConsumerState<SignUpPage> {
       'uid': user.uid,
       'username': _username,
       'tables': [],
-      'preferences': {},
+      'preferences': defaultPreferences,
       'friends': []
     });
   }
@@ -83,9 +84,9 @@ class _SignUpState extends ConsumerState<SignUpPage> {
   void _signUp() async {
     final checkForUser = await FirebaseFirestore.instance
         .collection('users')
-        .doc(_username)
+        .where('username', isEqualTo: _username)
         .get();
-    if (checkForUser.data() == null) {
+    if (checkForUser.docs.isEmpty) {
       try {
         AuthProvider().signUpWithEmail(
           _email,
@@ -106,6 +107,21 @@ class _SignUpState extends ConsumerState<SignUpPage> {
             MaterialPageRoute(builder: (context) => const ProfilePage()));
       });
     } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: const Text('That username is already taken'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                 child: const Text('Dismiss'))
+            ],
+          );
+        },
+      );
       log('Cannot create account: User already exists with that username.');
     }
   }
