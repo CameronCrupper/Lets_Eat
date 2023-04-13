@@ -19,14 +19,14 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               radius: 56,
               backgroundImage: AssetImage('assets/images/avatar.png'),
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
-            Text(
+            const Text(
               "User",
               style: TextStyle(
                 color: Colors.black,
@@ -43,7 +43,7 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
             //   ),
             // ),
             // ),
-            Text(
+            const Text(
               "@therealone",
               style: TextStyle(
                 color: Colors.grey,
@@ -51,7 +51,7 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
                 fontSize: 16,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Row(
@@ -83,7 +83,7 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
                 // ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Row(
@@ -103,21 +103,19 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
                   //     // Defer to the widget's default.
                   //   }),
                   // ),
-
-                  child: Text('Follow'),
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.lightGreen.shade600,
                     backgroundColor: Colors.black,
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: 50,
                       vertical: 8,
                     ),
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
-
+                  child: const Text('Follow'),
                   // color: Colors.black,
                   // child: Text(
                   //   "Follow",
@@ -125,25 +123,25 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
                   // ),
                   // padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 12,
                 ),
                 TextButton(
-                  child: Text("Message"),
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.lightGreen.shade600,
                     backgroundColor: Colors.black,
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: 50,
                       vertical: 8,
                     ),
                   ),
+                  child: const Text("Message"),
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Divider(
                 height: 18,
                 thickness: 0.6,
@@ -151,20 +149,18 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
               ),
             ),
             Expanded(
-              child: Container(
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  // itemCount: AssetImage.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/logo1.png')),
-                      ),
-                    );
-                  },
-                ),
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2),
+                // itemCount: AssetImage.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/images/logo1.png')),
+                    ),
+                  );
+                },
               ),
             ),
           ],

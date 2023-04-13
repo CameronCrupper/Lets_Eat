@@ -91,14 +91,7 @@ class _FriendSearchPageState extends ConsumerState<FriendSearchPage> {
                                     ),
                                   ]);
                                 }
-                                Column(
-                                  children: [
-                                    Container(
-                                      height: 300.0,
-                                      color: Colors.blue,
-                                    ),
-                                  ],
-                                );
+                                return Container();
                               });
                     }));
           } else {
