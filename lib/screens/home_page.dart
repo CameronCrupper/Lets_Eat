@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/signed_in.dart';
@@ -36,6 +37,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: _signedIn ? const ProfilePage() : const LoginPage(),
-      );
+    );
   }
 }

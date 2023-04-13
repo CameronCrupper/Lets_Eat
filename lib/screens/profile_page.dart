@@ -38,20 +38,18 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Future<DocumentSnapshot<Map<String, dynamic>>> getUser() async {
     await Future.delayed(const Duration(seconds: 1));
     final user = FirebaseAuth.instance.currentUser;
-    final currentUser = await FirebaseFirestore.instance.collection('users')
-      .doc(user!.uid).get();
+    final currentUser = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get();
     return currentUser;
   }
-  
+
   void _signOut() async {
     await FirebaseAuth.instance.signOut();
     ref.read(signedInProvider.notifier).state = false;
     Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const HomePage()
-      )
-    );
+        context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
 
   @override
@@ -62,55 +60,55 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           if (snapshot.data != null) {
             return Scaffold(
               appBar: AppBar(
-                title: Text('Welcome, ${snapshot.data!.data()?['username']}!'),
-                actions: [
-                  InkWell(
+                  backgroundColor: Colors.lightGreen.shade600,
+                  title:
+                      Text('Welcome, ${snapshot.data!.data()?['username']}!'),
+                  actions: [
+                    InkWell(
                       onTap: _signOut,
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Icon(Icons.logout),
                       ),
                     )
-                ]),
+                  ]),
               body: Center(
                 child: _pages.elementAt(_selectedIndex),
               ),
               bottomNavigationBar: BottomNavigationBar(
-                currentIndex: _selectedIndex,
-                selectedItemColor: Colors.grey[600],
-                unselectedItemColor: Colors.grey[600],
-                showUnselectedLabels: true,
-                onTap: _selectedPage,
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.house),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.people),
-                    label: 'Friends',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.table_restaurant_rounded),
-                    label: 'Tables',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.star),
-                    label: 'Likes',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.settings),
-                    label: 'Settings',
-                  ),
-                ]
-              ),
+                  currentIndex: _selectedIndex,
+                  selectedItemColor: Colors.grey[600],
+                  unselectedItemColor: Colors.grey[600],
+                  showUnselectedLabels: true,
+                  onTap: _selectedPage,
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.house),
+                      label: 'Home',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.people),
+                      label: 'Friends',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.table_restaurant_rounded),
+                      label: 'Tables',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.star),
+                      label: 'Likes',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.settings),
+                      label: 'Settings',
+                    ),
+                  ]),
             );
           } else {
-            return  const Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
-        }
-    );
+        });
   }
 }
