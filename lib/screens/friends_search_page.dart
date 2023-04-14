@@ -69,29 +69,58 @@ class _FriendSearchPageState extends ConsumerState<FriendSearchPage> {
                                     .toString()
                                     .toLowerCase()
                                     .startsWith(searchValue.toLowerCase())) {
-                                  return Row(children: [
-                                    Text(
-                                      data['username'],
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    TextButton(
-                                      child: const Text('Add friend'),
-                                      onPressed: () async {
-                                        var user =
-                                            FirebaseAuth.instance.currentUser;
-                                        await FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(user!.uid)
-                                            .update({
-                                          'friends': FieldValue.arrayUnion(
-                                              [data['uid']])
-                                        });
-                                      },
-                                    ),
-                                  ]);
+                                  //this is the visible list of names and add friend button
+
+                                  return Column(
+                                      // mainAxisAlignment:
+                                      //     MainAxisAlignment.center,
+                                      // crossAxisAlignment:
+                                      //     CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Divider(
+                                          height: 12,
+                                        ),
+                                        ListTile(
+                                          leading: CircleAvatar(
+                                            radius: 24.0,
+                                            backgroundImage: AssetImage(
+                                                'assets/images/avatar.png'),
+                                          ),
+                                        ),
+                                        Row(children: <Widget>[
+                                          // Text(data['username']),
+                                          SizedBox(width: 16),
+                                          Text(
+                                            data['username'],
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ]),
+                                        // Text(
+                                        //   data['username'],
+                                        //   maxLines: 1,
+                                        //   overflow: TextOverflow.ellipsis,
+                                        // ),
+                                        ElevatedButton(
+                                          child: const Text('Add friend'),
+                                          onPressed: () async {
+                                            var user = FirebaseAuth
+                                                .instance.currentUser;
+                                            await FirebaseFirestore.instance
+                                                .collection('users')
+                                                .doc(user!.uid)
+                                                .update({
+                                              'friends': FieldValue.arrayUnion(
+                                                  [data['uid']])
+                                            });
+                                          },
+                                        ),
+                                      ]);
                                 }
+                                // Do not touch V this is magic button!
                                 return Container();
+                                //no but it pops an invisible container so when there
+                                //isnt a successful return it appears to show nothing
                               });
                     }));
           } else {
