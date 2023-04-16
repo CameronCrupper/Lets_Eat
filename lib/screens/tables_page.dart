@@ -34,7 +34,7 @@ class _TablesPageState extends ConsumerState<TablesPage> {
                 alignment: Alignment.center,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/Logo1.png'),
+                    image: AssetImage('assets/images/test.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
