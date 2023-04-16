@@ -48,14 +48,13 @@ class _LoginState extends ConsumerState<LoginPage> {
     try {
       await AuthProvider().signInWithGoogle();
       final userUid = FirebaseAuth.instance.currentUser!.uid;
-      final checkForUser = await FirebaseFirestore.instance
+      var checkForUser = await FirebaseFirestore.instance
           .collection('users')
           .doc(userUid)
           .get();
       if (checkForUser.data() == null) {
         _addUser();
       }
-      ref.read(signedInProvider.notifier).state = true;
     } catch (e) {
       log('Login Failed: $e');
     }

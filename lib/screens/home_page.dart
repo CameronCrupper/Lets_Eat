@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
+// import '../classes/le_user.dart';
 import '../providers/signed_in.dart';
+// import '../providers/user_info.dart';
 import '../screens/login_page.dart';
 import '../screens/profile_page.dart';
 

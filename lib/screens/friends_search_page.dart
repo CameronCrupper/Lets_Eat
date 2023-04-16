@@ -77,10 +77,10 @@ class _FriendSearchPageState extends ConsumerState<FriendSearchPage> {
                                       // crossAxisAlignment:
                                       //     CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        Divider(
+                                        const Divider(
                                           height: 12,
                                         ),
-                                        ListTile(
+                                        const ListTile(
                                           leading: CircleAvatar(
                                             radius: 24.0,
                                             backgroundImage: AssetImage(
@@ -89,7 +89,7 @@ class _FriendSearchPageState extends ConsumerState<FriendSearchPage> {
                                         ),
                                         Row(children: <Widget>[
                                           // Text(data['username']),
-                                          SizedBox(width: 16),
+                                          const SizedBox(width: 16),
                                           Text(
                                             data['username'],
                                             maxLines: 1,
