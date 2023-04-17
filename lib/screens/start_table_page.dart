@@ -40,7 +40,7 @@ class _StartTablePageState extends ConsumerState<StartTablePage> {
       await FirebaseFirestore.instance.collection('tables').doc(tableUid).set({
         'tablename': _tablename,
         'attendees': _attendees,
-        'restaurant': {},
+        'restaurant': {'name':'none'},
         'uid': tableUid
       });
       tables.add(tableUid);

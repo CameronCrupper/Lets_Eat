@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lets_eat/providers/user_info.dart';
 
+import '../providers/user_info.dart';
 import 'start_table_page.dart';
+import 'active_table_page.dart';
 
 class TablesPage extends ConsumerStatefulWidget {
   const TablesPage({Key? key}) : super(key: key);
@@ -62,20 +63,36 @@ class _TablesPageState extends ConsumerState<TablesPage> {
                     builder: (context, snapshot) {
                       if (snapshot.data != null) {
                         // TILE FOR EACH TABLE IN USER'S LIST
-                        return Row(
-                          children: [
-                            Text(snapshot.data!.data()!['tablename']),
-                            const SizedBox(width: 20),
-                            TextButton(
-                              onPressed: () {
-                                tables.remove(snapshot.data!.data()!['uid']);
-                                updateTables();
-                                // Enter logic for removing user from table's list of attendees
-                                setState(() {});
-                              },
-                              child: const Text('Leave Table')
-                            )
-                          ]
+                        return InkWell(
+                          onTap:() {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                  ActiveTablePage(
+                                    tableUid:snapshot.data!.data()!['uid']
+                                  )
+                              )
+                            );
+                          },
+                          child: Container(
+                            color: Colors.white,
+                            child: Row(
+                              children: [
+                                Text(snapshot.data!.data()!['tablename']),
+                                const SizedBox(width: 20),
+                                TextButton(
+                                  onPressed: () {
+                                    tables.remove(snapshot.data!.data()!['uid']);
+                                    updateTables();
+                                    // Enter logic for removing user from table's list of attendees
+                                    setState(() {});
+                                  },
+                                  child: const Text('Leave Table')
+                                )
+                              ]
+                            ),
+                          )
                         );
                       } else {
                         return const Center(
