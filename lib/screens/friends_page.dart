@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lets_eat/providers/user_info.dart';
 
 import 'friends_search_page.dart';
-
-// class MyWidget extends StatelessWidget {
-//   const MyWidget({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(height: 300, color: Colors.black);
-//   }
-// }
 
 class FriendsPage extends ConsumerStatefulWidget {
   const FriendsPage({Key? key}) : super(key: key);
@@ -22,74 +13,75 @@ class FriendsPage extends ConsumerStatefulWidget {
 }
 
 class _FriendsPageState extends ConsumerState<FriendsPage> {
-  Future<DocumentSnapshot<Map<String, dynamic>>> getUser() async {
-    await Future.delayed(const Duration(seconds: 1));
-    final user = FirebaseAuth.instance.currentUser;
-    final currentUser = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user!.uid)
-        .get();
-    return currentUser;
+  late List<dynamic> friends = ref.watch(friendsProvider);
+  late String uid = ref.watch(uidProvider);
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getFriend(String friend) async {
+    final friendInfo = await FirebaseFirestore.instance.collection('users')
+      .doc(friend).get();
+    return friendInfo;
   }
 
-  // Future<List<String>> getUserFriends() async {
-  //   await Future.delayed(const Duration(seconds: 1));
-  //   List<String> friendList = [];
-  //   final user = FirebaseAuth.instance.currentUser;
-  //   final currentUser = await FirebaseFirestore.instance.collection('users')
-  //     .doc(user!.uid).get();
-  //   for (var friend in currentUser.data()!['friends']) {
-  //     final currentFriend = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(friend).get();
-  //     friendList.add(
-  //       currentFriend.data()!['username']
-  //     );
-  //   }
-  //   return friendList;
-  // }
+  void updateFriends() {
+    FirebaseFirestore.instance.collection('users')
+      .doc(uid)
+      .update({'friends': friends});
+    ref.read(friendsProvider.notifier).updateFriends(friends);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getUser(),
-        builder: (context, snapshot) {
-          if (snapshot.data != null) {
-            return Column(
-              children: [
-                Hero(
-                    tag: 'image1',
-                    child: Image.asset('assets/images/Logo1.png')),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const FriendSearchPage()));
-                    },
-                    child: const Text('Find New Friends')),
-                // Container(
-                //   height: 285,
-                //   color: Colors.red,
-                // ),
-                Expanded(
-                    child: ListView.builder(
-                        itemCount: snapshot.data!.data()?['friends'].length,
-                        itemBuilder: (context, index) {
-                          // return ListTile(
-                          //   title: Text(snapshot.data![index]['title']),
-                          //   subtitle: Text(snapshot.data![index]['desc']),
-                          // );
-                          return Text(
-                              '${snapshot.data!.data()?['friends'][index]}');
-                        }))
-              ],
+    return Column(
+      children: [
+        Hero(
+            tag: 'image1',
+            child: Image.asset('assets/images/Logo1.png')
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FriendSearchPage()
+              )
             );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
+          },
+          child: const Text('Find New Friends')
+        ),
+        const Text('Here is your list of friends'),
+        Expanded(
+          child: ListView.builder(
+            itemCount: friends.length,
+            itemBuilder: (context, index) {
+              return FutureBuilder(
+                future: getFriend(friends[index]),
+                builder: (context, snapshot) {
+                  if (snapshot.data != null) {
+                    // TILE FOR EACH FRIEND IN USER'S LIST
+                    return Row(
+                      children: [
+                        Text(snapshot.data!.data()!['username']),
+                        const SizedBox(width: 20),
+                        TextButton(
+                          onPressed: () {
+                            friends.remove(snapshot.data!.data()!['uid']);
+                            updateFriends();
+                            setState(() {});
+                          },
+                          child: const Text('Remove Friend')
+                        )
+                      ]
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }
+              );
+          })
+        )
+      ],
+    );
   }
 }

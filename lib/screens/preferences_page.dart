@@ -20,7 +20,7 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
   void _updatePreference() {
     FirebaseFirestore.instance.collection('users')
       .doc(uid)
-      .set({'preferences': preferences});
+      .update({'preferences': preferences});
     ref.read(preferencesProvider.notifier).updatePreferences(preferences);
   }
 

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lets_eat/providers/user_info.dart';
 
-// import '../classes/le_user.dart';
+import '../providers/user_info.dart';
 import '../providers/signed_in.dart';
+
 import '../screens/home_page.dart';
 import '../screens/friends_page.dart';
 import '../screens/preferences_page.dart';
@@ -28,7 +28,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   late String uid = ref.watch(uidProvider);
 
   int _selectedIndex = 0;
-  int firstReadFlag = 0;
 
   void _selectedPage(int index) {
     setState(() {
@@ -51,31 +50,26 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         .collection('users')
         .doc(user!.uid)
         .get();
-    if (firstReadFlag == 0) {
-      ref.read(usernameProvider.notifier).updateUsername(
-          currentUser.data()!['username']
-      );
-      username = ref.watch(usernameProvider);
-      ref.read(uidProvider.notifier).updateUid(
-        currentUser.data()!['uid']
-      );
-      uid = ref.watch(uidProvider);
-      ref.read(tablesProvider.notifier).updateTables(
-        currentUser.data()!['tables']
-      );
-      tables = ref.watch(tablesProvider);
-      ref.read(friendsProvider.notifier).updateFriends(
-        currentUser.data()!['friends']
-      );
-      friends = ref.watch(friendsProvider);
-      ref.read(preferencesProvider.notifier).updatePreferences(
-        currentUser.data()!['preferences']
-      );
-      preferences = ref.watch(preferencesProvider);
-      setState(() {
-        firstReadFlag = 1;
-      });
-    }
+    ref.read(usernameProvider.notifier).updateUsername(
+        currentUser.data()!['username']
+    );
+    username = ref.watch(usernameProvider);
+    ref.read(uidProvider.notifier).updateUid(
+      currentUser.data()!['uid']
+    );
+    uid = ref.watch(uidProvider);
+    ref.read(tablesProvider.notifier).updateTables(
+      currentUser.data()!['tables']
+    );
+    tables = ref.watch(tablesProvider);
+    ref.read(friendsProvider.notifier).updateFriends(
+      currentUser.data()!['friends']
+    );
+    friends = ref.watch(friendsProvider);
+    ref.read(preferencesProvider.notifier).updatePreferences(
+      currentUser.data()!['preferences']
+    );
+    preferences = ref.watch(preferencesProvider);
     return currentUser;
   }
 
