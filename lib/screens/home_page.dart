@@ -38,6 +38,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData.from(
+          colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.lightGreen, backgroundColor: Colors.amber)),
       home: _signedIn ? const ProfilePage() : const LoginPage(),
     );
   }

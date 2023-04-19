@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lets_eat/screens/stat_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lets_eat/providers/user_info.dart';
 
 class DefaultPage extends ConsumerStatefulWidget {
   const DefaultPage({Key? key}) : super(key: key);
@@ -105,8 +108,8 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
                   // ),
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.lightGreen.shade600,
-                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.lightGreen.shade600,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 50,
                       vertical: 8,
@@ -129,8 +132,8 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
                 TextButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.lightGreen.shade600,
-                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.lightGreen.shade600,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 50,
                       vertical: 8,
