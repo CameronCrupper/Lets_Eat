@@ -29,10 +29,11 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: Image.asset('assets/images/LetsEatLogo.png',
-              height: 300, width: 200),
-        ),
+        // Container(
+        //   child: Image.asset('assets/images/LetsEatLogo.png',
+        //       height: 300, width: 200),
+        // ),
+
         // Theme(
         //   data:
         //       Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.black),
@@ -52,39 +53,56 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
             child: const Text('Find New Friends')),
         const Text('Here is your list of friends'),
         Expanded(
-            child: ListView.builder(
-                itemCount: currentLEUser.friends.length,
-                itemBuilder: (context, index) {
-                  return FutureBuilder(
-                      future: getFriend(currentLEUser.friends[index]),
-                      builder: (context, snapshot) {
-                        if (snapshot.data != null) {
-                          // TILE FOR EACH FRIEND IN USER'S LIST
-                          return Row(children: [
-                            Text(snapshot.data!.data()!['username']),
-                            const SizedBox(width: 20),
-                            ElevatedButton(
-                                onPressed: () {
-                                  currentLEUser.friends
-                                      .remove(snapshot.data!.data()!['uid']);
-                                  currentLEUser
-                                      .updateFriends(currentLEUser.friends);
-                                  FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(currentLEUser.userUid)
-                                      .update(
-                                          {'friends': currentLEUser.friends});
-                                  setState(() {});
-                                },
-                                child: const Text('Remove Friend'))
-                          ]);
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      });
-                }))
+          child: ListView.builder(
+            itemCount: currentLEUser.friends.length,
+            itemBuilder: (context, index) {
+              return FutureBuilder(
+                future: getFriend(currentLEUser.friends[index]),
+                builder: (context, snapshot) {
+                  if (snapshot.data != null) {
+                    // TILE FOR EACH FRIEND IN USER'S LIST
+
+                    return Column(children: <Widget>[
+                      // const SizedBox(width: 1),
+                      const Divider(
+                        height: 25,
+                      ),
+                      const ListTile(
+                        leading: CircleAvatar(
+                          radius: 24.0,
+                          backgroundImage:
+                              AssetImage('assets/images/avatar.png'),
+                        ),
+                      ),
+                      Text(
+                        snapshot.data!.data()!['username'],
+                        // maxLines: 1,
+                        // overflow: TextOverflow.ellipsis,
+                      ),
+                      // const SizedBox(width: 20),
+                      ElevatedButton(
+                          onPressed: () {
+                            currentLEUser.friends
+                                .remove(snapshot.data!.data()!['uid']);
+                            currentLEUser.updateFriends(currentLEUser.friends);
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(currentLEUser.userUid)
+                                .update({'friends': currentLEUser.friends});
+                            setState(() {});
+                          },
+                          child: const Text('Remove Friend'))
+                    ]);
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              );
+            },
+          ),
+        )
       ],
     );
   }
