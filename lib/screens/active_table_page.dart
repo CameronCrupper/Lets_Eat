@@ -27,14 +27,13 @@ class _ActiveTablePageState extends ConsumerState<ActiveTablePage> {
   int finalScore = 0;
 
   Restaurant winningRestaurant = Restaurant(
-    id: '',
-    streetAddress: '',
-    cityStateZip: '',
-    phoneNumber: '',
-    name: '',
-    imageUrl: '',
-    categories: []
-  );
+      id: '',
+      streetAddress: '',
+      cityStateZip: '',
+      phoneNumber: '',
+      name: '',
+      imageUrl: '',
+      categories: []);
 
   late bool loading = false;
 
@@ -49,7 +48,8 @@ class _ActiveTablePageState extends ConsumerState<ActiveTablePage> {
     return tableInfo;
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getFriend(String friend) async {
+  Future<DocumentSnapshot<Map<String, dynamic>>> getFriend(
+      String friend) async {
     final friendInfo =
         await FirebaseFirestore.instance.collection('users').doc(friend).get();
     return friendInfo;
@@ -57,37 +57,35 @@ class _ActiveTablePageState extends ConsumerState<ActiveTablePage> {
 
   void updateAttendees() {
     FirebaseFirestore.instance
-      .collection('tables')
-      .doc(_tableUid)
-      .update({'attendees': _attendees});
+        .collection('tables')
+        .doc(_tableUid)
+        .update({'attendees': _attendees});
   }
 
   void removeTableFromFriend(String friendUid) {
-    FirebaseFirestore.instance
-      .collection('users')
-      .doc(friendUid)
-      .update({'tables':FieldValue.arrayRemove([_tableUid])});
+    FirebaseFirestore.instance.collection('users').doc(friendUid).update({
+      'tables': FieldValue.arrayRemove([_tableUid])
+    });
   }
 
   void findRestaurant() async {
     setState(() {
       loading = true;
     });
-    final String url = 'https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?location=${user.userCity}%2C%20${user.userState}%20${user.userZip}&term=restaurants&radius=20000&sort_by=distance&limit=50';
-    try{
+    final String url =
+        'https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?location=${user.userCity}%2C%20${user.userState}%20${user.userZip}&term=restaurants&radius=20000&sort_by=distance&limit=50';
+    try {
       var response = await Dio().get(url,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer rGBvlomkTgEsREMjSCEKHvdI7jEcBelFO-TW0gP_Dq0MXJoeNNOuLc2Is9naydJb034HSOX_YxGSX_EzhMFkBExJ0LRzroH37JGOf57sy2NMPUrQBuDqY7A2AZ0lZHYx',
+          options: Options(headers: {
+            'Authorization':
+                'Bearer rGBvlomkTgEsREMjSCEKHvdI7jEcBelFO-TW0gP_Dq0MXJoeNNOuLc2Is9naydJb034HSOX_YxGSX_EzhMFkBExJ0LRzroH37JGOf57sy2NMPUrQBuDqY7A2AZ0lZHYx',
             'accept': 'application/json',
             'Access-Control-Allow-Origin': '*'
-          }
-        )
-      );
+          }));
       var restaurantList = [];
       for (var result in response.data['businesses']) {
-        var csz = 
-          '${result['location']['city']}, ${result['location']['state']} ${result['location']['zip_code']}';
+        var csz =
+            '${result['location']['city']}, ${result['location']['state']} ${result['location']['zip_code']}';
         var catList = [];
         for (var category in result['categories']) {
           catList.add(category['title']);
@@ -96,17 +94,17 @@ class _ActiveTablePageState extends ConsumerState<ActiveTablePage> {
         if (result['image_url'] != null) {
           imgUrl = result['image_url'];
         } else {
-          imgUrl = 'https://www.svgrepo.com/show/92091/location-placeholder.svg';
+          imgUrl =
+              'https://www.svgrepo.com/show/92091/location-placeholder.svg';
         }
         var restaurant = Restaurant(
-          id: result['id'],
-          streetAddress: result['location']['address1'],
-          cityStateZip: csz,
-          phoneNumber: result['display_phone'],
-          name: result['name'],
-          imageUrl: imgUrl,
-          categories: catList
-        );
+            id: result['id'],
+            streetAddress: result['location']['address1'],
+            cityStateZip: csz,
+            phoneNumber: result['display_phone'],
+            name: result['name'],
+            imageUrl: imgUrl,
+            categories: catList);
         restaurantList.add(restaurant);
       }
       List<Map<String, dynamic>> listToSort = [];
@@ -114,10 +112,12 @@ class _ActiveTablePageState extends ConsumerState<ActiveTablePage> {
         int restaurantScore = 0;
         for (var attendee in _attendees) {
           var attendeeScore = 0;
-          final thisAttendee = await FirebaseFirestore.instance.collection('users')
-            .doc(attendee).get();
+          final thisAttendee = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(attendee)
+              .get();
           for (var category in item.categories) {
-            if (thisAttendee.data()!['preferences'].containsKey('$category')){
+            if (thisAttendee.data()!['preferences'].containsKey('$category')) {
               int score = thisAttendee.data()!['preferences']['$category'];
               attendeeScore += score;
             }
@@ -125,10 +125,7 @@ class _ActiveTablePageState extends ConsumerState<ActiveTablePage> {
           restaurantScore += attendeeScore;
         }
         restaurantScore ~/ _attendees.length.toInt();
-        listToSort.add({
-          'id': '${item.id}',
-          'score': restaurantScore
-        });
+        listToSort.add({'id': '${item.id}', 'score': restaurantScore});
       }
       listToSort.sort((Map a, Map b) => a['score'] - b['score']);
       for (var item in restaurantList) {
@@ -137,19 +134,18 @@ class _ActiveTablePageState extends ConsumerState<ActiveTablePage> {
           finalScore = listToSort.last['score'];
         }
       }
-      FirebaseFirestore.instance.collection('tables')
-        .doc(_tableUid).update({
-          'restaurant': {
-            'name': winningRestaurant.name,
-            'streetAddress': winningRestaurant.streetAddress,
-            'cityStateZip': winningRestaurant.cityStateZip,
-            'phoneNumber': winningRestaurant.phoneNumber,
-            'id': winningRestaurant.id,
-            'imageUrl': winningRestaurant.imageUrl,
-            'categories': winningRestaurant.categories,
-            'score': finalScore
-          }
-        });
+      FirebaseFirestore.instance.collection('tables').doc(_tableUid).update({
+        'restaurant': {
+          'name': winningRestaurant.name,
+          'streetAddress': winningRestaurant.streetAddress,
+          'cityStateZip': winningRestaurant.cityStateZip,
+          'phoneNumber': winningRestaurant.phoneNumber,
+          'id': winningRestaurant.id,
+          'imageUrl': winningRestaurant.imageUrl,
+          'categories': winningRestaurant.categories,
+          'score': finalScore
+        }
+      });
       setState(() {
         loading = false;
       });
@@ -161,133 +157,117 @@ class _ActiveTablePageState extends ConsumerState<ActiveTablePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getTable(widget.tableUid),
-      builder: (context, snapshot) {
-        if (snapshot.data != null) {
-          _attendees = snapshot.data!.data()!['attendees'];
-          _tableUid = snapshot.data!.data()!['uid'];
-          _tablename = snapshot.data!.data()!['tablename'];
-          _restaurant = snapshot.data!.data()!['restaurant'];
-          if (snapshot.data!.data()!['score'] != null) {
-            finalScore = snapshot.data!.data()!['score'];
-          }
-          if (_restaurant['name'] != 'none') {
-            winningRestaurant.id = _restaurant['id'];
-            winningRestaurant.name = _restaurant['name'];
-            winningRestaurant.streetAddress = '';
-            if (_restaurant['streetAddress'] != null) {
-              winningRestaurant.streetAddress = _restaurant['streetAddress'];
+        future: getTable(widget.tableUid),
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            _attendees = snapshot.data!.data()!['attendees'];
+            _tableUid = snapshot.data!.data()!['uid'];
+            _tablename = snapshot.data!.data()!['tablename'];
+            _restaurant = snapshot.data!.data()!['restaurant'];
+            if (snapshot.data!.data()!['score'] != null) {
+              finalScore = snapshot.data!.data()!['score'];
             }
-            winningRestaurant.cityStateZip = _restaurant['cityStateZip'];
-            winningRestaurant.phoneNumber = _restaurant['phoneNumber'];
-            winningRestaurant.imageUrl = _restaurant['imageUrl'];
-            winningRestaurant.categories = _restaurant['categories'];
-            finalScore = _restaurant['score'];
+            if (_restaurant['name'] != 'none') {
+              winningRestaurant.id = _restaurant['id'];
+              winningRestaurant.name = _restaurant['name'];
+              winningRestaurant.streetAddress = '';
+              if (_restaurant['streetAddress'] != null) {
+                winningRestaurant.streetAddress = _restaurant['streetAddress'];
+              }
+              winningRestaurant.cityStateZip = _restaurant['cityStateZip'];
+              winningRestaurant.phoneNumber = _restaurant['phoneNumber'];
+              winningRestaurant.imageUrl = _restaurant['imageUrl'];
+              winningRestaurant.categories = _restaurant['categories'];
+              finalScore = _restaurant['score'];
+            }
+            return Scaffold(
+                appBar: AppBar(
+                    backgroundColor: Colors.lightGreen.shade600,
+                    leading: const BackButton(),
+                    title: Text(
+                      _tablename,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+                body: Container(
+                    color: Colors.amber,
+                    child: Column(children: [
+                      if (_restaurant['name'] == 'none')
+                        ElevatedButton(
+                            onPressed: () {
+                              findRestaurant();
+                            },
+                            child: const Text('Find a Restaurant')),
+                      if (loading == true)
+                        const SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: CircularProgressIndicator()),
+                      if (_restaurant['name'] != 'none')
+                        Card(
+                            child: Column(
+                          children: [
+                            Text(winningRestaurant.name,
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold)),
+                            if (winningRestaurant.streetAddress != '')
+                              Text('${winningRestaurant.streetAddress}'),
+                            Text('${winningRestaurant.cityStateZip}'),
+                            Text('${winningRestaurant.phoneNumber}'),
+                            const Text('Categories:'),
+                            for (var category in winningRestaurant.categories)
+                              Text(category),
+                            Text('The overall score: $finalScore'),
+                            SizedBox(
+                                height: 250,
+                                width: 250,
+                                child:
+                                    Image.network(winningRestaurant.imageUrl)),
+                          ],
+                        )),
+                      const Text('Attendees:'),
+                      Expanded(
+                          child: ListView.builder(
+                              itemCount: _attendees.length,
+                              itemBuilder: (context, index) {
+                                return FutureBuilder(
+                                    future: getFriend(_attendees[index]),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.data != null) {
+                                        return Row(
+                                          children: [
+                                            Text(
+                                                '${snapshot.data!.data()!['username']}'),
+                                            const SizedBox(width: 20),
+                                            ElevatedButton(
+                                                onPressed: () {
+                                                  _attendees.remove(snapshot
+                                                      .data!
+                                                      .data()!['uid']);
+                                                  updateAttendees();
+                                                  removeTableFromFriend(snapshot
+                                                      .data!
+                                                      .data()!['uid']);
+                                                  setState(() {});
+                                                },
+                                                child: const Text(
+                                                    'Remove From Table'))
+                                          ],
+                                        );
+                                      } else {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      }
+                                    });
+                              })),
+                    ])));
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
-          return Scaffold(
-            appBar: AppBar(
-                backgroundColor: Colors.lightGreen.shade600,
-                leading: const BackButton(),
-                title: Text(
-                  _tablename,
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                )),
-            body: Container(
-              color: Colors.white,
-              child: Column(
-                children: [
-                  if (_restaurant['name'] == 'none')
-                    ElevatedButton(
-                        onPressed: () {
-                          findRestaurant();
-                        },
-                        child: const Text('Find a Restaurant')),
-                  if (loading == true)
-                    const SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: CircularProgressIndicator()
-                    ),
-                  if (_restaurant['name'] != 'none')
-                    Card(
-                      child: Column(
-                        children: [
-                          Text(
-                            winningRestaurant.name,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold
-                            )
-                          ),
-                          if (winningRestaurant.streetAddress != '')
-                            Text('${winningRestaurant.streetAddress}'),
-                          Text('${winningRestaurant.cityStateZip}'),
-                          Text('${winningRestaurant.phoneNumber}'),
-                          const Text('Categories:'),
-                          for (var category in winningRestaurant.categories)
-                            Text(category),
-                          Text('The overall score: $finalScore'),
-                          SizedBox(
-                            height: 250,
-                            width: 250,
-                            child: Image.network(winningRestaurant.imageUrl)
-                          ),
-                        ],
-                      )
-                    ),
-                  const Text('Attendees:'),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: _attendees.length,
-                      itemBuilder: (context, index) {
-                        return FutureBuilder(
-                          future: getFriend(_attendees[index]),
-                          builder: (context, snapshot) {
-                            if (snapshot.data != null) {
-                              return Row(
-                                children: [
-                                  Text(
-                                    '${snapshot.data!.data()!['username']}'
-                                  ),
-                                  const SizedBox(width: 20),
-                                  TextButton(
-                                    onPressed: () {
-                                      _attendees.remove(
-                                        snapshot.data!.data()!['uid']
-                                      );
-                                      updateAttendees();
-                                      removeTableFromFriend(
-                                        snapshot.data!.data()!['uid']
-                                      );
-                                      setState(() {});
-                                    },
-                                    child: const Text(
-                                        'Remove From Table'
-                                    )
-                                  )
-                                ],
-                              );
-                            } else {
-                              return const Center(
-                                child: CircularProgressIndicator());
-                            }
-                          }
-                        );
-                      }
-                    )
-                  ),
-                ]
-              )
-            )
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-    });
+        });
   }
 }
