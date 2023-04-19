@@ -39,7 +39,10 @@ class _LoginState extends ConsumerState<LoginPage> {
         'username': 'anonymous_${user.uid.substring(0,6)}',
         'tables': [],
         'preferences': defaultPreferences,
-        'friends': []
+        'friends': [],
+        'city': '',
+        'state': '',
+        'zip': ''
       });
     }
   }

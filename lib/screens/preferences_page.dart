@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/le_user.dart';
+
 import '../default_data/preferences.dart';
-import '../providers/user_info.dart';
+
+import '../providers/leuser.dart';
 
 class PreferencesPage extends ConsumerStatefulWidget {
   const PreferencesPage({Key? key}) : super(key: key);
@@ -14,15 +16,7 @@ class PreferencesPage extends ConsumerStatefulWidget {
 }
 
 class _PreferencesPageState extends ConsumerState<PreferencesPage> {
-  late Map<String, dynamic> preferences = ref.watch(preferencesProvider);
-  late String uid = ref.watch(uidProvider);
-
-  void _updatePreference() {
-    FirebaseFirestore.instance.collection('users')
-      .doc(uid)
-      .update({'preferences': preferences});
-    ref.read(preferencesProvider.notifier).updatePreferences(preferences);
-  }
+  late LEUser user = ref.watch(leUserProvider);
 
   List defaultValueList = emptyValueList;
   List defaultKeyList = preferencesList;
@@ -33,17 +27,19 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
       children: [
         TextButton(
           onPressed: () {
-            _updatePreference();
+            FirebaseFirestore.instance.collection('users')
+              .doc(user.userUid)
+              .update({'preferences': user.preferences});
           },
           child: const Text(
             'Save preferences'
           )),
         Expanded(
           child: ListView.builder(
-          itemCount: preferences.length,
+          itemCount: user.preferences.length,
           itemBuilder: (context, index) {
-            final prefKey = preferences.keys.elementAt(index);
-            final prefValue = preferences.values.elementAt(index);
+            final prefKey = user.preferences.keys.elementAt(index);
+            final prefValue = user.preferences.values.elementAt(index);
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
@@ -59,11 +55,11 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
                     max: 10,
                     onChanged: (value) {
                       setState(() {
-                        preferences[prefKey] = value.toInt();
+                        user.preferences[prefKey] = value.toInt();
                       });
                     },
                   ),
-                  Text('${preferences[prefKey]}')
+                  Text('${user.preferences[prefKey]}')
                 ],
               )
             );

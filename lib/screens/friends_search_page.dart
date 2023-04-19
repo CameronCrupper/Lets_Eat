@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lets_eat/providers/user_info.dart';
+
+import '../models/le_user.dart';
+
+import '../providers/leuser.dart';
 
 class FriendSearchPage extends ConsumerStatefulWidget {
   const FriendSearchPage({Key? key}) : super(key: key);
@@ -11,19 +14,9 @@ class FriendSearchPage extends ConsumerStatefulWidget {
 }
 
 class _FriendSearchPageState extends ConsumerState<FriendSearchPage> {
-  // final TextEditingController _searchController = TextEditingController();
-  late String username = ref.watch(usernameProvider);
-  late List<dynamic> friends = ref.watch(friendsProvider);
-  late String uid = ref.watch(uidProvider);
+  late LEUser user = ref.watch(leUserProvider);
 
   String searchValue = '';
-
-  void updateFriends() {
-    FirebaseFirestore.instance.collection('users')
-      .doc(uid)
-      .update({'friends': friends});
-    ref.read(friendsProvider.notifier).updateFriends(friends);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +59,9 @@ class _FriendSearchPageState extends ConsumerState<FriendSearchPage> {
                           .toLowerCase()
                           .startsWith(searchValue.toLowerCase())
                           &&
-                          (data['username'] != username)
+                          (data['username'] != user.username)
+                          &&
+                          (!user.friends.contains(data['uid']))
                          ) {
                         //this is the visible list of names and add friend button
                         return Column(
@@ -102,8 +97,12 @@ class _FriendSearchPageState extends ConsumerState<FriendSearchPage> {
                               ElevatedButton(
                                 child: const Text('Add friend'),
                                 onPressed: () async {
-                                  friends.add(data['uid']);
-                                  updateFriends();
+                                  user.friends.add(data['uid']);
+                                  user.updateFriends(user.friends);
+                                  FirebaseFirestore.instance.collection('users')
+                                    .doc(user.userUid)
+                                    .update({'friends': user.friends});
+                                  setState(() {});
                                 },
                               ),
                             ]);
