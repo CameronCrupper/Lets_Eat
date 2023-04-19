@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lets_eat/screens/stat_widget.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lets_eat/providers/user_info.dart';
 
 class DefaultPage extends ConsumerStatefulWidget {
   const DefaultPage({Key? key}) : super(key: key);

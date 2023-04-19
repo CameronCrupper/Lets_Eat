@@ -63,7 +63,7 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
                           return Row(children: [
                             Text(snapshot.data!.data()!['username']),
                             const SizedBox(width: 20),
-                            TextButton(
+                            ElevatedButton(
                                 onPressed: () {
                                   currentLEUser.friends
                                       .remove(snapshot.data!.data()!['uid']);
