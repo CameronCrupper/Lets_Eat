@@ -77,7 +77,10 @@ class _SignUpState extends ConsumerState<SignUpPage> {
       'username': _username,
       'tables': [],
       'preferences': defaultPreferences,
-      'friends': []
+      'friends': [],
+      'city': '',
+      'state': '',
+      'zip': ''
     });
   }
 

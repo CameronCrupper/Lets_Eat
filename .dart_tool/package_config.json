@@ -74,6 +74,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "dio",
+      "rootUri": "file:///home/bean/.pub-cache/hosted/pub.dev/dio-5.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "email_validator",
       "rootUri": "file:///home/bean/.pub-cache/hosted/pub.dev/email_validator-2.1.17",
       "packageUri": "lib/",
@@ -356,7 +362,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-04-17T04:58:08.591257Z",
+  "generated": "2023-04-19T00:01:41.136421Z",
   "generator": "pub",
   "generatorVersion": "3.0.0-384.0.dev"
 }

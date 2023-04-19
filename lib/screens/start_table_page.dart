@@ -1,10 +1,11 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
-import '../providers/user_info.dart';
+import '../providers/leuser.dart';
+
+import '../models/le_user.dart';
 
 class StartTablePage extends ConsumerStatefulWidget {
   const StartTablePage({Key? key}) : super(key: key);
@@ -14,9 +15,7 @@ class StartTablePage extends ConsumerStatefulWidget {
 }
 
 class _StartTablePageState extends ConsumerState<StartTablePage> {
-  late List<dynamic> tables = ref.watch(tablesProvider);
-  late List<dynamic> friends = ref.watch(friendsProvider);
-  late String uid = ref.watch(uidProvider);
+  late LEUser user = ref.watch(leUserProvider);
 
   final TextEditingController _tablenameController = TextEditingController();
 
@@ -30,46 +29,26 @@ class _StartTablePageState extends ConsumerState<StartTablePage> {
     return friendInfo;
   }
 
-  void createTable() async {
-    final String tableUid = const Uuid().v1().toString();
-    final checkForTable = await FirebaseFirestore.instance
-      .collection('tables')
-      .where('tablename', isEqualTo: _tablename)
-      .get();
-    if (checkForTable.docs.isEmpty) {
-      await FirebaseFirestore.instance.collection('tables').doc(tableUid).set({
-        'tablename': _tablename,
-        'attendees': _attendees,
-        'restaurant': {'name':'none'},
-        'uid': tableUid
-      });
-      tables.add(tableUid);
-      updateTables();
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: const Text('That Table name is already taken'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                 child: const Text('Dismiss'))
-            ],
-          );
-        },
-      );
-      log('Cannot create table: Table already exists with that tablename.');
-    }
+  Future<DocumentSnapshot<Map<String, dynamic>>> getAttendee(String attendee) {
+    final attendeeDoc = FirebaseFirestore.instance.collection('users')
+      .doc(attendee).get();
+    return attendeeDoc;
   }
 
-  void updateTables() {
-    FirebaseFirestore.instance.collection('users')
-      .doc(uid)
-      .update({'tables': tables});
-    ref.read(tablesProvider.notifier).updateTables(tables);
+  void createTable() async {
+    _attendees.add(user.userUid);
+    final String tableUid = const Uuid().v1().toString();
+    await FirebaseFirestore.instance.collection('tables').doc(tableUid).set({
+      'tablename': _tablename,
+      'attendees': _attendees,
+      'restaurant': {'name':'none'},
+      'uid': tableUid
+    });
+    for (var attendee in _attendees) {
+      FirebaseFirestore.instance
+        .collection('users').doc(attendee)
+        .update({'tables': FieldValue.arrayUnion([tableUid])});
+    }
   }
 
   @override
@@ -108,10 +87,10 @@ class _StartTablePageState extends ConsumerState<StartTablePage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: friends.length,
+              itemCount: user.friends.length,
               itemBuilder: (context, index) {
                 return FutureBuilder(
-                  future: getFriend(friends[index]),
+                  future: getFriend(user.friends[index]),
                   builder: (context, snapshot) {
                     if (snapshot.data != null) {
                       // TILE FOR EACH FRIEND IN USER'S LIST

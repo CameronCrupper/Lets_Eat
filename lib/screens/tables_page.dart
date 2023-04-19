@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../providers/user_info.dart';
-import 'start_table_page.dart';
-import 'active_table_page.dart';
+import '../screens/start_table_page.dart';
+import '../screens/active_table_page.dart';
+
+import '../models/le_user.dart';
+
+import '../providers/leuser.dart';
 
 class TablesPage extends ConsumerStatefulWidget {
   const TablesPage({Key? key}) : super(key: key);
@@ -14,8 +17,9 @@ class TablesPage extends ConsumerStatefulWidget {
 }
 
 class _TablesPageState extends ConsumerState<TablesPage> {
-  late String uid = ref.watch(uidProvider);
-  late List<dynamic> tables = ref.watch(tablesProvider);
+  late LEUser user = ref.watch(leUserProvider);
+  // late String uid = ref.watch(uidProvider);
+  // late List<dynamic> tables = ref.watch(tablesProvider);
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getTable(String table) async {
     final tableInfo =
@@ -23,13 +27,13 @@ class _TablesPageState extends ConsumerState<TablesPage> {
     return tableInfo;
   }
 
-  void updateTables() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .update({'tables': tables});
-    ref.read(tablesProvider.notifier).updateTables(tables);
-  }
+  // void updateTables() {
+  //   FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(uid)
+  //       .update({'tables': tables});
+  //   ref.read(tablesProvider.notifier).updateTables(tables);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -57,17 +61,17 @@ class _TablesPageState extends ConsumerState<TablesPage> {
                     MaterialPageRoute(
                         builder: (context) => const StartTablePage()));
               },
-              child: const Text('Start a New Table'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.lightGreen.shade600,
               ),
+              child: const Text('Start a New Table'),
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: tables.length,
+                itemCount: user.tables.length,
                 itemBuilder: (context, index) {
                   return FutureBuilder(
-                    future: getTable(tables[index]),
+                    future: getTable(user.tables[index]),
                     builder: (context, snapshot) {
                       if (snapshot.data != null) {
                         // TILE FOR EACH TABLE IN USER'S LIST
@@ -98,10 +102,21 @@ class _TablesPageState extends ConsumerState<TablesPage> {
                                 const SizedBox(height: 20, width: 20),
                                 TextButton(
                                   onPressed: () {
-                                    tables
+                                    user.tables
                                         .remove(snapshot.data!.data()!['uid']);
-                                    updateTables();
-                                    // Enter logic for removing user from table's list of attendees
+                                    FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(user.userUid)
+                                      .update({'tables': user.tables});
+                                    FirebaseFirestore.instance
+                                      .collection('tables')
+                                      .doc(snapshot.data!.data()!['uid'])
+                                      .update(
+                                        {
+                                          'attendees': FieldValue
+                                            .arrayRemove([user.userUid])
+                                        }
+                                      );
                                     setState(() {});
                                   },
                                   //Leave table custom button

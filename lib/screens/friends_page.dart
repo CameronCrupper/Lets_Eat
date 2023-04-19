@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lets_eat/providers/user_info.dart';
+
+import '../models/le_user.dart';
+
+import '../providers/leuser.dart';
 
 import 'friends_search_page.dart';
 
@@ -13,22 +16,13 @@ class FriendsPage extends ConsumerStatefulWidget {
 }
 
 class _FriendsPageState extends ConsumerState<FriendsPage> {
-  late List<dynamic> friends = ref.watch(friendsProvider);
-  late String uid = ref.watch(uidProvider);
+  late LEUser currentLEUser = ref.watch(leUserProvider);
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getFriend(
       String friend) async {
     final friendInfo =
         await FirebaseFirestore.instance.collection('users').doc(friend).get();
     return friendInfo;
-  }
-
-  void updateFriends() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .update({'friends': friends});
-    ref.read(friendsProvider.notifier).updateFriends(friends);
   }
 
   @override
@@ -59,20 +53,27 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
         const Text('Here is your list of friends'),
         Expanded(
             child: ListView.builder(
-                itemCount: friends.length,
+                itemCount: currentLEUser.friends.length,
                 itemBuilder: (context, index) {
                   return FutureBuilder(
-                      future: getFriend(friends[index]),
+                      future: getFriend(currentLEUser.friends[index]),
                       builder: (context, snapshot) {
                         if (snapshot.data != null) {
                           // TILE FOR EACH FRIEND IN USER'S LIST
                           return Row(children: [
                             Text(snapshot.data!.data()!['username']),
                             const SizedBox(width: 20),
-                            ElevatedButton(
+                            TextButton(
                                 onPressed: () {
-                                  friends.remove(snapshot.data!.data()!['uid']);
-                                  updateFriends();
+                                  currentLEUser.friends
+                                      .remove(snapshot.data!.data()!['uid']);
+                                  currentLEUser
+                                      .updateFriends(currentLEUser.friends);
+                                  FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(currentLEUser.userUid)
+                                      .update(
+                                          {'friends': currentLEUser.friends});
                                   setState(() {});
                                 },
                                 child: const Text('Remove Friend'))
