@@ -78,10 +78,14 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
                                 AssetImage('assets/images/avatar.png'),
                           ),
                         ),
-                        Text(
-                          snapshot.data!.data()!['username'],
-                          // maxLines: 1,
-                          // overflow: TextOverflow.ellipsis,
+                        Row(
+                          children: [
+                            Text(
+                              snapshot.data!.data()!['username'],
+                              // maxLines: 1,
+                              // overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
                         ),
                         // const SizedBox(width: 20),
                         ElevatedButton(

@@ -249,8 +249,19 @@ class _ActiveTablePageState extends ConsumerState<ActiveTablePage> {
                                   const Divider(
                                     height: 1,
                                   ),
-                                  const ListTile(),
-                                  Text('${snapshot.data!.data()!['username']}'),
+                                  const ListTile(
+                                    leading: CircleAvatar(
+                                      radius: 24.0,
+                                      backgroundImage: AssetImage(
+                                          'assets/images/avatar.png'),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                          '${snapshot.data!.data()!['username']}'),
+                                    ],
+                                  ),
                                   const SizedBox(height: 1, width: 20),
                                   ElevatedButton(
                                     onPressed: () {
