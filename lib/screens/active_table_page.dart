@@ -157,117 +157,134 @@ class _ActiveTablePageState extends ConsumerState<ActiveTablePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getTable(widget.tableUid),
-        builder: (context, snapshot) {
-          if (snapshot.data != null) {
-            _attendees = snapshot.data!.data()!['attendees'];
-            _tableUid = snapshot.data!.data()!['uid'];
-            _tablename = snapshot.data!.data()!['tablename'];
-            _restaurant = snapshot.data!.data()!['restaurant'];
-            if (snapshot.data!.data()!['score'] != null) {
-              finalScore = snapshot.data!.data()!['score'];
-            }
-            if (_restaurant['name'] != 'none') {
-              winningRestaurant.id = _restaurant['id'];
-              winningRestaurant.name = _restaurant['name'];
-              winningRestaurant.streetAddress = '';
-              if (_restaurant['streetAddress'] != null) {
-                winningRestaurant.streetAddress = _restaurant['streetAddress'];
-              }
-              winningRestaurant.cityStateZip = _restaurant['cityStateZip'];
-              winningRestaurant.phoneNumber = _restaurant['phoneNumber'];
-              winningRestaurant.imageUrl = _restaurant['imageUrl'];
-              winningRestaurant.categories = _restaurant['categories'];
-              finalScore = _restaurant['score'];
-            }
-            return Scaffold(
-                appBar: AppBar(
-                    backgroundColor: Colors.lightGreen.shade600,
-                    leading: const BackButton(),
-                    title: Text(
-                      _tablename,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                    )),
-                body: Container(
-                    color: Colors.amber,
-                    child: Column(children: [
-                      if (_restaurant['name'] == 'none')
-                        ElevatedButton(
-                            onPressed: () {
-                              findRestaurant();
-                            },
-                            child: const Text('Find a Restaurant')),
-                      if (loading == true)
-                        const SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: CircularProgressIndicator()),
-                      if (_restaurant['name'] != 'none')
-                        Card(
-                            child: Column(
-                          children: [
-                            Text(winningRestaurant.name,
-                                style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold)),
-                            if (winningRestaurant.streetAddress != '')
-                              Text('${winningRestaurant.streetAddress}'),
-                            Text('${winningRestaurant.cityStateZip}'),
-                            Text('${winningRestaurant.phoneNumber}'),
-                            const Text('Categories:'),
-                            for (var category in winningRestaurant.categories)
-                              Text(category),
-                            Text('The overall score: $finalScore'),
-                            SizedBox(
-                                height: 250,
-                                width: 250,
-                                child:
-                                    Image.network(winningRestaurant.imageUrl)),
-                          ],
-                        )),
-                      const Text('Attendees:'),
-                      Expanded(
-                          child: ListView.builder(
-                              itemCount: _attendees.length,
-                              itemBuilder: (context, index) {
-                                return FutureBuilder(
-                                    future: getFriend(_attendees[index]),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.data != null) {
-                                        return Row(
-                                          children: [
-                                            Text(
-                                                '${snapshot.data!.data()!['username']}'),
-                                            const SizedBox(width: 20),
-                                            ElevatedButton(
-                                                onPressed: () {
-                                                  _attendees.remove(snapshot
-                                                      .data!
-                                                      .data()!['uid']);
-                                                  updateAttendees();
-                                                  removeTableFromFriend(snapshot
-                                                      .data!
-                                                      .data()!['uid']);
-                                                  setState(() {});
-                                                },
-                                                child: const Text(
-                                                    'Remove From Table'))
-                                          ],
-                                        );
-                                      } else {
-                                        return const Center(
-                                            child: CircularProgressIndicator());
-                                      }
-                                    });
-                              })),
-                    ])));
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+      future: getTable(widget.tableUid),
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          _attendees = snapshot.data!.data()!['attendees'];
+          _tableUid = snapshot.data!.data()!['uid'];
+          _tablename = snapshot.data!.data()!['tablename'];
+          _restaurant = snapshot.data!.data()!['restaurant'];
+          if (snapshot.data!.data()!['score'] != null) {
+            finalScore = snapshot.data!.data()!['score'];
           }
-        });
+          if (_restaurant['name'] != 'none') {
+            winningRestaurant.id = _restaurant['id'];
+            winningRestaurant.name = _restaurant['name'];
+            winningRestaurant.streetAddress = '';
+            if (_restaurant['streetAddress'] != null) {
+              winningRestaurant.streetAddress = _restaurant['streetAddress'];
+            }
+            winningRestaurant.cityStateZip = _restaurant['cityStateZip'];
+            winningRestaurant.phoneNumber = _restaurant['phoneNumber'];
+            winningRestaurant.imageUrl = _restaurant['imageUrl'];
+            winningRestaurant.categories = _restaurant['categories'];
+            finalScore = _restaurant['score'];
+          }
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.lightGreen.shade600,
+              leading: const BackButton(),
+              title: Text(
+                _tablename,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            body: Container(
+              color: Colors.amber,
+              child: Column(
+                children: [
+                  if (_restaurant['name'] == 'none')
+                    ElevatedButton(
+                      onPressed: () {
+                        findRestaurant();
+                      },
+                      child: const Text('Find a Restaurant'),
+                    ),
+                  if (loading == true)
+                    const SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: CircularProgressIndicator(),
+                    ),
+                  if (_restaurant['name'] != 'none')
+                    Card(
+                        child: Column(
+                      children: [
+                        Text(
+                          winningRestaurant.name,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        if (winningRestaurant.streetAddress != '')
+                          Text('${winningRestaurant.streetAddress}'),
+                        Text('${winningRestaurant.cityStateZip}'),
+                        Text('${winningRestaurant.phoneNumber}'),
+                        const Text('Categories:'),
+                        for (var category in winningRestaurant.categories)
+                          Text(category),
+                        Text('The overall score: $finalScore'),
+                        SizedBox(
+                          height: 250,
+                          width: 250,
+                          child: Image.network(winningRestaurant.imageUrl),
+                        ),
+                      ],
+                    )),
+                  const Text('Attendees:'),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _attendees.length,
+                      itemBuilder: (context, index) {
+                        return FutureBuilder(
+                          future: getFriend(_attendees[index]),
+                          builder: (context, snapshot) {
+                            if (snapshot.data != null) {
+                              return Column(
+                                children: <Widget>[
+                                  const Divider(
+                                    height: 1,
+                                  ),
+                                  const ListTile(),
+                                  Text('${snapshot.data!.data()!['username']}'),
+                                  const SizedBox(height: 1, width: 20),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      _attendees.remove(
+                                          snapshot.data!.data()!['uid']);
+                                      updateAttendees();
+                                      removeTableFromFriend(
+                                          snapshot.data!.data()!['uid']);
+                                      setState(() {});
+                                    },
+                                    child: const Text('Remove From Table'),
+                                  )
+                                ],
+                              );
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
   }
 }

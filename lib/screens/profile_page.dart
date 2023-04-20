@@ -28,9 +28,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   int _selectedIndex = 0;
 
   void _selectedPage(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    setState(
+      () {
+        _selectedIndex = index;
+      },
+    );
   }
 
   static const List<Widget> _pages = <Widget>[
@@ -48,8 +50,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         .collection('users')
         .doc(fbUser!.uid)
         .get();
-    ref.read(leUserProvider.notifier).updateLEUser(
-      LEUser(
+    ref.read(leUserProvider.notifier).updateLEUser(LEUser(
         username: currentUser.data()!['username'],
         userUid: currentUser.data()!['uid'],
         friends: currentUser.data()!['friends'],
@@ -57,9 +58,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         preferences: currentUser.data()!['preferences'],
         userCity: currentUser.data()!['city'],
         userState: currentUser.data()!['state'],
-        userZip: currentUser.data()!['zip']
-      )
-    );
+        userZip: currentUser.data()!['zip']));
     user = ref.watch(leUserProvider);
     return currentUser;
   }
@@ -67,6 +66,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   void _signOut() async {
     await FirebaseAuth.instance.signOut();
     ref.read(signedInProvider.notifier).state = false;
+    // ignore: use_build_context_synchronously
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
@@ -74,60 +74,62 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getUser(),
-        builder: (context, snapshot) {
-          if (snapshot.data != null) {
-            return Scaffold(
-              appBar: AppBar(
-                  backgroundColor: Colors.lightGreen.shade600,
-                  title:
-                      Text('Welcome, ${user.username}!'),
-                  actions: [
-                    InkWell(
-                      onTap: _signOut,
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.logout),
-                      ),
-                    )
-                  ]),
-              body: Center(
-                child: _pages.elementAt(_selectedIndex),
-              ),
-              bottomNavigationBar: BottomNavigationBar(
-                  currentIndex: _selectedIndex,
-                  selectedItemColor: Colors.grey[600],
-                  unselectedItemColor: Colors.grey[600],
-                  showUnselectedLabels: true,
-                  onTap: _selectedPage,
-                  items: const <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.house),
-                      label: 'Home',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.people),
-                      label: 'Friends',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.table_restaurant_rounded),
-                      label: 'Tables',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.star),
-                      label: 'Likes',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.settings),
-                      label: 'Settings',
-                    ),
-                  ]),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
+      future: getUser(),
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.lightGreen.shade600,
+              title: Text('Welcome, ${user.username}!'),
+              actions: [
+                InkWell(
+                  onTap: _signOut,
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.logout),
+                  ),
+                )
+              ],
+            ),
+            body: Center(
+              child: _pages.elementAt(_selectedIndex),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _selectedIndex,
+              selectedItemColor: Colors.grey[600],
+              unselectedItemColor: Colors.grey[600],
+              showUnselectedLabels: true,
+              onTap: _selectedPage,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.house),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.people),
+                  label: 'Friends',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.table_restaurant_rounded),
+                  label: 'Tables',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.star),
+                  label: 'Likes',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings),
+                  label: 'Settings',
+                ),
+              ],
+            ),
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
   }
 }

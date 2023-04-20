@@ -36,7 +36,7 @@ class _LoginState extends ConsumerState<LoginPage> {
     if (user != null) {
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
         'uid': user.uid,
-        'username': 'anonymous_${user.uid.substring(0,6)}',
+        'username': 'anonymous_${user.uid.substring(0, 6)}',
         'tables': [],
         'preferences': defaultPreferences,
         'friends': [],
@@ -108,21 +108,27 @@ class _LoginState extends ConsumerState<LoginPage> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
                 decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Email',
-                    hintText: 'Enter valid email'),
+                  border: OutlineInputBorder(),
+                  labelText: 'Email',
+                  hintText: 'Enter valid email',
+                ),
                 controller: _emailController,
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 0),
+                left: 15.0,
+                right: 15.0,
+                top: 15,
+                bottom: 0,
+              ),
               child: TextField(
                 obscureText: true,
                 decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                    hintText: 'Enter password'),
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
+                  hintText: 'Enter password',
+                ),
                 controller: _passwordController,
               ),
             ),
@@ -134,14 +140,19 @@ class _LoginState extends ConsumerState<LoginPage> {
                   style: TextStyle(color: Colors.black, fontSize: 15),
                 ),
                 InkWell(
-                    child: const Text('Create Account',
-                        style: TextStyle(color: Colors.black, fontSize: 15)),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignUpPage()));
-                    })
+                  child: const Text(
+                    'Create Account',
+                    style: TextStyle(color: Colors.black, fontSize: 15),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpPage(),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
             // TextButton(
@@ -157,8 +168,9 @@ class _LoginState extends ConsumerState<LoginPage> {
               height: 50,
               width: 250,
               decoration: BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.circular(20)),
+                color: Colors.orange,
+                borderRadius: BorderRadius.circular(20),
+              ),
               child: TextButton(
                 onPressed: () {
                   _emailSignIn();

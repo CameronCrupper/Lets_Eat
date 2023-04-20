@@ -27,115 +27,110 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   String _username = '';
 
   void updateLocation() {
-    FirebaseFirestore.instance.collection('users')
-      .doc(user.userUid).update({
-        'city': _city,
-        'state': _state,
-        'zip': _zip
-      });
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.userUid)
+        .update({'city': _city, 'state': _state, 'zip': _zip});
   }
 
   void updateUsername() {
-    FirebaseFirestore.instance.collection('users')
-      .doc(user.userUid).update({
-        'username': _username
-      });
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.userUid)
+        .update({'username': _username});
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Text('Set Your Username',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20
-              )
+        child: SingleChildScrollView(
+            child: Column(
+      children: [
+        const Text('Set Your Username',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Username',
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                decoration: const InputDecoration(
-                  border:  OutlineInputBorder(),
-                  labelText: 'Username',
-                ),
-                controller: _usernameController,
-                onChanged: (value) {
-                  setState(() {
-                    _username = value;
-                  });
+            controller: _usernameController,
+            onChanged: (value) {
+              setState(
+                () {
+                  _username = value;
                 },
-              )
+              );
+            },
+          ),
+        ),
+        ElevatedButton(
+          child: const Text('Save Your Username'),
+          onPressed: () {
+            updateUsername();
+          },
+        ),
+        const SizedBox(height: 75),
+        const Text('Set Your Location',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'City',
             ),
-            ElevatedButton(
-              child: const Text('Save Your Username'),
-              onPressed: () {
-                updateUsername();
-              },
-            ),
-            const SizedBox(height: 75),
-            const Text('Set Your Location',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20
-              )
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                decoration: const InputDecoration(
-                  border:  OutlineInputBorder(),
-                  labelText: 'City',
-                ),
-                controller: _cityController,
-                onChanged: (value) {
-                  setState(() {
-                    _city = value;
-                  });
+            controller: _cityController,
+            onChanged: (value) {
+              setState(
+                () {
+                  _city = value;
                 },
-              )
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'State',
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                decoration: const InputDecoration(
-                  border:  OutlineInputBorder(),
-                  labelText: 'State',
-                ),
-                controller: _stateController,
-                onChanged: (value) {
-                  setState(() {
-                    _state = value;
-                  });
+            controller: _stateController,
+            onChanged: (value) {
+              setState(
+                () {
+                  _state = value;
                 },
-              )
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                decoration: const InputDecoration(
-                  border:  OutlineInputBorder(),
-                  labelText: 'Zip Code',
-                ),
-                controller: _zipController,
-                onChanged: (value) {
-                  setState(() {
+              );
+            },
+          ),
+        ),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Zip Code',
+              ),
+              controller: _zipController,
+              onChanged: (value) {
+                setState(
+                  () {
                     _zip = value;
-                  });
-                },
-              )
-            ),
-            ElevatedButton(
-              child: const Text('Save Your Location'),
-              onPressed: () {
-                updateLocation();
+                  },
+                );
               },
-            )
-          ],
+            )),
+        ElevatedButton(
+          child: const Text('Save Your Location'),
+          onPressed: () {
+            updateLocation();
+          },
         )
-      )
-    );
-  } 
+      ],
+    )));
+  }
 }

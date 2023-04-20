@@ -23,31 +23,38 @@ class _StartTablePageState extends ConsumerState<StartTablePage> {
   final List<dynamic> _attendees = [];
   final List<dynamic> _attendeesNames = [];
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getFriend(String friend) async {
-    final friendInfo = await FirebaseFirestore.instance.collection('users')
-      .doc(friend).get();
+  Future<DocumentSnapshot<Map<String, dynamic>>> getFriend(
+      String friend) async {
+    final friendInfo =
+        await FirebaseFirestore.instance.collection('users').doc(friend).get();
     return friendInfo;
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getAttendee(String attendee) {
-    final attendeeDoc = FirebaseFirestore.instance.collection('users')
-      .doc(attendee).get();
+    final attendeeDoc =
+        FirebaseFirestore.instance.collection('users').doc(attendee).get();
     return attendeeDoc;
   }
 
   void createTable() async {
     _attendees.add(user.userUid);
     final String tableUid = const Uuid().v1().toString();
-    await FirebaseFirestore.instance.collection('tables').doc(tableUid).set({
-      'tablename': _tablename,
-      'attendees': _attendees,
-      'restaurant': {'name':'none'},
-      'uid': tableUid
-    });
+    await FirebaseFirestore.instance.collection('tables').doc(tableUid).set(
+      {
+        'tablename': _tablename,
+        'attendees': _attendees,
+        'restaurant': {'name': 'none'},
+        'uid': tableUid
+      },
+    );
     for (var attendee in _attendees) {
-      FirebaseFirestore.instance
-        .collection('users').doc(attendee)
-        .update({'tables': FieldValue.arrayUnion([tableUid])});
+      FirebaseFirestore.instance.collection('users').doc(attendee).update(
+        {
+          'tables': FieldValue.arrayUnion(
+            [tableUid],
+          ),
+        },
+      );
     }
   }
 
@@ -56,24 +63,33 @@ class _StartTablePageState extends ConsumerState<StartTablePage> {
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
-        title: const Text('New Table')
+        title: const Text(
+          'New Table',
+        ),
       ),
       body: Column(
         children: <Widget>[
           // TABLENAME TEXT FIELD
           Padding(
             padding: const EdgeInsets.only(
-                left: 15.0, right: 15.0, top: 20, bottom: 10),
+              left: 15.0,
+              right: 15.0,
+              top: 20,
+              bottom: 10,
+            ),
             child: TextField(
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Table Name',
-                  hintText: 'Enter a name for your table'),
+                border: OutlineInputBorder(),
+                labelText: 'Table Name',
+                hintText: 'Enter a name for your table',
+              ),
               controller: _tablenameController,
               onChanged: (value) {
-                setState(() {
-                  _tablename = value;
-                });
+                setState(
+                  () {
+                    _tablename = value;
+                  },
+                );
               },
             ),
           ),
@@ -83,44 +99,64 @@ class _StartTablePageState extends ConsumerState<StartTablePage> {
             onPressed: () {
               createTable();
             },
-            child: const Text('Create Table')
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+            ),
+            child: const Text(
+              'Create Table',
+            ),
           ),
           Expanded(
             child: ListView.builder(
               itemCount: user.friends.length,
               itemBuilder: (context, index) {
                 return FutureBuilder(
-                  future: getFriend(user.friends[index]),
+                  future: getFriend(
+                    user.friends[index],
+                  ),
                   builder: (context, snapshot) {
                     if (snapshot.data != null) {
                       // TILE FOR EACH FRIEND IN USER'S LIST
-                      return Row(
+                      return Column(
                         children: [
-                          Text(snapshot.data!.data()!['username']),
-                          const SizedBox(width: 20),
-                          TextButton(
+                          const Divider(
+                              // height: 5,
+                              ),
+                          const ListTile(),
+                          Text(
+                            snapshot.data!.data()!['username'],
+                          ),
+                          const SizedBox(width: 5),
+                          ElevatedButton(
                             onPressed: () {
-                              _attendees.add(snapshot.data!.data()!['uid']);
-                              _attendeesNames.add(
-                                snapshot.data!.data()!['username']
+                              _attendees.add(
+                                snapshot.data!.data()!['uid'],
                               );
-                              setState(() {});
+                              _attendeesNames.add(
+                                snapshot.data!.data()!['username'],
+                              );
+                              setState(
+                                () {},
+                              );
                             },
-                            child: const Text('Add Friend to Table')
+                            child: const Text(
+                              'Add Friend to Table',
+                            ),
                           )
-                        ]
+                        ],
                       );
                     } else {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
-                  }
+                  },
                 );
-            })
+              },
+            ),
           )
         ],
-      )
+      ),
     );
-  } 
+  }
 }

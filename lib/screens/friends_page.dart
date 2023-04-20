@@ -44,13 +44,16 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
         //     child: Image.asset('assets/images/Logo1.png')
         // ),
         ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const FriendSearchPage()));
-            },
-            child: const Text('Find New Friends')),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FriendSearchPage(),
+              ),
+            );
+          },
+          child: const Text('Find New Friends'),
+        ),
         const Text('Here is your list of friends'),
         Expanded(
           child: ListView.builder(
@@ -62,25 +65,26 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
                   if (snapshot.data != null) {
                     // TILE FOR EACH FRIEND IN USER'S LIST
 
-                    return Column(children: <Widget>[
-                      // const SizedBox(width: 1),
-                      const Divider(
-                        height: 25,
-                      ),
-                      const ListTile(
-                        leading: CircleAvatar(
-                          radius: 24.0,
-                          backgroundImage:
-                              AssetImage('assets/images/avatar.png'),
+                    return Column(
+                      children: <Widget>[
+                        // const SizedBox(width: 1),
+                        const Divider(
+                          height: 25,
                         ),
-                      ),
-                      Text(
-                        snapshot.data!.data()!['username'],
-                        // maxLines: 1,
-                        // overflow: TextOverflow.ellipsis,
-                      ),
-                      // const SizedBox(width: 20),
-                      ElevatedButton(
+                        const ListTile(
+                          leading: CircleAvatar(
+                            radius: 24.0,
+                            backgroundImage:
+                                AssetImage('assets/images/avatar.png'),
+                          ),
+                        ),
+                        Text(
+                          snapshot.data!.data()!['username'],
+                          // maxLines: 1,
+                          // overflow: TextOverflow.ellipsis,
+                        ),
+                        // const SizedBox(width: 20),
+                        ElevatedButton(
                           onPressed: () {
                             currentLEUser.friends
                                 .remove(snapshot.data!.data()!['uid']);
@@ -91,8 +95,10 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
                                 .update({'friends': currentLEUser.friends});
                             setState(() {});
                           },
-                          child: const Text('Remove Friend'))
-                    ]);
+                          child: const Text('Remove Friend'),
+                        )
+                      ],
+                    );
                   } else {
                     return const Center(
                       child: CircularProgressIndicator(),

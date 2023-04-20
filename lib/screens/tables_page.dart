@@ -57,9 +57,11 @@ class _TablesPageState extends ConsumerState<TablesPage> {
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const StartTablePage()));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const StartTablePage(),
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.lightGreen.shade600,
@@ -78,11 +80,12 @@ class _TablesPageState extends ConsumerState<TablesPage> {
                         return InkWell(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ActiveTablePage(
-                                        tableUid:
-                                            snapshot.data!.data()!['uid'])));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ActiveTablePage(
+                                    tableUid: snapshot.data!.data()!['uid']),
+                              ),
+                            );
                           },
                           child: Container(
                             color: Colors.transparent,
@@ -99,24 +102,28 @@ class _TablesPageState extends ConsumerState<TablesPage> {
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
-                                const SizedBox(height: 20, width: 20),
+                                const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                ),
                                 TextButton(
                                   onPressed: () {
                                     user.tables
                                         .remove(snapshot.data!.data()!['uid']);
                                     FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(user.userUid)
-                                      .update({'tables': user.tables});
+                                        .collection('users')
+                                        .doc(user.userUid)
+                                        .update({'tables': user.tables});
                                     FirebaseFirestore.instance
-                                      .collection('tables')
-                                      .doc(snapshot.data!.data()!['uid'])
-                                      .update(
-                                        {
-                                          'attendees': FieldValue
-                                            .arrayRemove([user.userUid])
-                                        }
-                                      );
+                                        .collection('tables')
+                                        .doc(snapshot.data!.data()!['uid'])
+                                        .update(
+                                      {
+                                        'attendees': FieldValue.arrayRemove(
+                                          [user.userUid],
+                                        )
+                                      },
+                                    );
                                     setState(() {});
                                   },
                                   //Leave table custom button
@@ -125,26 +132,36 @@ class _TablesPageState extends ConsumerState<TablesPage> {
                                     width: 150,
                                     decoration: BoxDecoration(
                                       color: Colors.grey.shade300,
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius: BorderRadius.circular(
+                                        15,
+                                      ),
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.lightGreen.shade600,
                                           spreadRadius: 1,
                                           blurRadius: 8,
-                                          offset: const Offset(4, 4),
+                                          offset: const Offset(
+                                            4,
+                                            4,
+                                          ),
                                         ),
                                         const BoxShadow(
                                           color: Colors.white,
                                           spreadRadius: 2,
                                           blurRadius: 8,
-                                          offset: Offset(-4, -4),
+                                          offset: Offset(
+                                            -4,
+                                            -4,
+                                          ),
                                         ),
                                       ],
                                     ),
                                     child: const Center(
                                       child: Text(
                                         "Leave Table",
-                                        style: TextStyle(color: Colors.black),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
                                         // child: const Text(
                                         //   'Leave Table',
                                         //   style: TextStyle(color: Colors.white),

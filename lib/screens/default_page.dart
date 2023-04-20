@@ -151,13 +151,15 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
+                  crossAxisCount: 2,
+                ),
                 // itemCount: AssetImage.length,
                 itemBuilder: (context, index) {
                   return Container(
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage('assets/images/logo1.png')),
+                        image: AssetImage('assets/images/logo1.png'),
+                      ),
                     ),
                   );
                 },
