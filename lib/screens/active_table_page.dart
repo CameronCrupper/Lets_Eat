@@ -193,7 +193,14 @@ class _ActiveTablePageState extends ConsumerState<ActiveTablePage> {
               ),
             ),
             body: Container(
-              color: Colors.amber,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xff7cb342), Color(0xffffc107)],
+                  stops: [0, 1],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
               child: Column(
                 children: [
                   if (_restaurant['name'] == 'none')

@@ -61,112 +61,135 @@ class _StartTablePageState extends ConsumerState<StartTablePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(),
-        title: const Text(
-          'New Table',
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xff7cb342), Color(0xffffc107)],
+            stops: [0, 1],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
         ),
-      ),
-      body: Column(
-        children: <Widget>[
-          // TABLENAME TEXT FIELD
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 15.0,
-              right: 15.0,
-              top: 20,
-              bottom: 10,
+        child: Scaffold(
+          appBar: AppBar(
+            // backgroundColor: Colors.transparent,
+            leading: const BackButton(),
+            title: const Text(
+              'New Table',
             ),
-            child: TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Table Name',
-                hintText: 'Enter a name for your table',
+          ),
+          body: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xff7cb342), Color(0xffffc107)],
+                stops: [0, 1],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
-              controller: _tablenameController,
-              onChanged: (value) {
-                setState(
-                  () {
-                    _tablename = value;
-                  },
-                );
-              },
             ),
-          ),
-          Text('Invited: $_attendeesNames'),
-          // SIGN UP BUTTON
-          ElevatedButton(
-            onPressed: () {
-              createTable();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-            ),
-            child: const Text(
-              'Create Table',
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: user.friends.length,
-              itemBuilder: (context, index) {
-                return FutureBuilder(
-                  future: getFriend(
-                    user.friends[index],
+            child: Column(
+              children: <Widget>[
+                // TABLENAME TEXT FIELD
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 15.0,
+                    right: 15.0,
+                    top: 20,
+                    bottom: 10,
                   ),
-                  builder: (context, snapshot) {
-                    if (snapshot.data != null) {
-                      // TILE FOR EACH FRIEND IN USER'S LIST
-                      return Column(
-                        children: [
-                          const Divider(
-                              // height: 5,
-                              ),
-                          // const ListTile(),
-                          const ListTile(
-                            leading: CircleAvatar(
-                              radius: 24.0,
-                              backgroundImage:
-                                  AssetImage('assets/images/avatar.png'),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                snapshot.data!.data()!['username'],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(width: 5),
-                          ElevatedButton(
-                            onPressed: () {
-                              _attendees.add(
-                                snapshot.data!.data()!['uid'],
-                              );
-                              _attendeesNames.add(
-                                snapshot.data!.data()!['username'],
-                              );
-                              setState(
-                                () {},
-                              );
-                            },
-                            child: const Text(
-                              'Add Friend to Table',
-                            ),
-                          )
-                        ],
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Table Name',
+                      hintText: 'Enter a name for your table',
+                    ),
+                    controller: _tablenameController,
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          _tablename = value;
+                        },
                       );
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
+                    },
+                  ),
+                ),
+                Text('Invited: $_attendeesNames'),
+                // SIGN UP BUTTON
+                ElevatedButton(
+                  onPressed: () {
+                    createTable();
                   },
-                );
-              },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                  ),
+                  child: const Text(
+                    'Create Table',
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: user.friends.length,
+                    itemBuilder: (context, index) {
+                      return FutureBuilder(
+                        future: getFriend(
+                          user.friends[index],
+                        ),
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null) {
+                            // TILE FOR EACH FRIEND IN USER'S LIST
+                            return Column(
+                              children: [
+                                const Divider(
+                                    // height: 5,
+                                    ),
+                                // const ListTile(),
+                                const ListTile(
+                                  leading: CircleAvatar(
+                                    radius: 24.0,
+                                    backgroundImage:
+                                        AssetImage('assets/images/avatar.png'),
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      snapshot.data!.data()!['username'],
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(width: 5),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _attendees.add(
+                                      snapshot.data!.data()!['uid'],
+                                    );
+                                    _attendeesNames.add(
+                                      snapshot.data!.data()!['username'],
+                                    );
+                                    setState(
+                                      () {},
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Add Friend to Table',
+                                  ),
+                                )
+                              ],
+                            );
+                          } else {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
+                      );
+                    },
+                  ),
+                )
+              ],
             ),
-          )
-        ],
+          ),
+        ),
       ),
     );
   }

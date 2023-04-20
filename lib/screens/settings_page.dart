@@ -42,95 +42,111 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: SingleChildScrollView(
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xff7cb342), Color(0xffffc107)],
+            stops: [0, 1],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
             child: Column(
-      children: [
-        const Text('Set Your Username',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Username',
-            ),
-            controller: _usernameController,
-            onChanged: (value) {
-              setState(
-                () {
-                  _username = value;
-                },
-              );
-            },
-          ),
-        ),
-        ElevatedButton(
-          child: const Text('Save Your Username'),
-          onPressed: () {
-            updateUsername();
-          },
-        ),
-        const SizedBox(height: 75),
-        const Text('Set Your Location',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'City',
-            ),
-            controller: _cityController,
-            onChanged: (value) {
-              setState(
-                () {
-                  _city = value;
-                },
-              );
-            },
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'State',
-            ),
-            controller: _stateController,
-            onChanged: (value) {
-              setState(
-                () {
-                  _state = value;
-                },
-              );
-            },
-          ),
-        ),
-        Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Zip Code',
-              ),
-              controller: _zipController,
-              onChanged: (value) {
-                setState(
-                  () {
-                    _zip = value;
+              children: [
+                const Text('Set Your Username',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Username',
+                    ),
+                    controller: _usernameController,
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          _username = value;
+                        },
+                      );
+                    },
+                  ),
+                ),
+                ElevatedButton(
+                  child: const Text('Save Your Username'),
+                  onPressed: () {
+                    updateUsername();
                   },
-                );
-              },
-            )),
-        ElevatedButton(
-          child: const Text('Save Your Location'),
-          onPressed: () {
-            updateLocation();
-          },
-        )
-      ],
-    )));
+                ),
+                const SizedBox(height: 75),
+                const Text('Set Your Location',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'City',
+                    ),
+                    controller: _cityController,
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          _city = value;
+                        },
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'State',
+                    ),
+                    controller: _stateController,
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          _state = value;
+                        },
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Zip Code',
+                      ),
+                      controller: _zipController,
+                      onChanged: (value) {
+                        setState(
+                          () {
+                            _zip = value;
+                          },
+                        );
+                      },
+                    )),
+                ElevatedButton(
+                  child: const Text('Save Your Location'),
+                  onPressed: () {
+                    updateLocation();
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

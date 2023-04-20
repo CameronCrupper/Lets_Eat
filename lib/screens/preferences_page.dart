@@ -23,54 +23,68 @@ class _PreferencesPageState extends ConsumerState<PreferencesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButton(
-          onPressed: () {
-            FirebaseFirestore.instance
-                .collection('users')
-                .doc(user.userUid)
-                .update({'preferences': user.preferences});
-          },
-          child: const Text(
-            'Save preferences',
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xff7cb342), Color(0xffffc107)],
+            stops: [0, 1],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: user.preferences.length,
-            itemBuilder: (context, index) {
-              final prefKey = user.preferences.keys.elementAt(index);
-              final prefValue = user.preferences.values.elementAt(index);
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                      width: 200,
-                      child: Text(prefKey),
-                    ),
-                    Slider(
-                      value: prefValue,
-                      min: 0,
-                      max: 10,
-                      onChanged: (value) {
-                        setState(
-                          () {
-                            user.preferences[prefKey] = value.toInt();
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(user.userUid)
+                    .update({'preferences': user.preferences});
+              },
+              child: const Text(
+                'Save preferences',
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: user.preferences.length,
+                itemBuilder: (context, index) {
+                  final prefKey = user.preferences.keys.elementAt(index);
+                  final prefValue = user.preferences.values.elementAt(index);
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          height: 20,
+                          width: 200,
+                          child: Text(prefKey),
+                        ),
+                        Slider(
+                          activeColor: Colors.green.shade700,
+                          inactiveColor: Colors.white54,
+                          value: prefValue,
+                          min: 0,
+                          max: 10,
+                          onChanged: (value) {
+                            setState(
+                              () {
+                                user.preferences[prefKey] = value.toInt();
+                              },
+                            );
                           },
-                        );
-                      },
+                        ),
+                        Text('${user.preferences[prefKey]}')
+                      ],
                     ),
-                    Text('${user.preferences[prefKey]}')
-                  ],
-                ),
-              );
-            },
-          ),
-        )
-      ],
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
