@@ -43,8 +43,11 @@ class _HomePageState extends ConsumerState<HomePage> {
       //   // scaffoldBackgroundColor: Colors.transparent,
       // ),
       theme: ThemeData.from(
-          colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.lightGreen, backgroundColor: Colors.amber)),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.lightGreen,
+          backgroundColor: Colors.amber,
+        ),
+      ),
       home: _signedIn ? const ProfilePage() : const LoginPage(),
     );
   }

@@ -99,6 +99,9 @@ class _StartTablePageState extends ConsumerState<StartTablePage> {
                   ),
                   child: TextField(
                     decoration: const InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
                       border: OutlineInputBorder(),
                       labelText: 'Table Name',
                       hintText: 'Enter a name for your table',

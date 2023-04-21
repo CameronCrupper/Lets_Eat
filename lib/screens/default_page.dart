@@ -34,7 +34,7 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
               height: 12,
             ),
             const Text(
-              "User",
+              "Holberton",
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -51,9 +51,9 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
             // ),
             // ),
             const Text(
-              "@therealone",
+              "Welcome",
               style: TextStyle(
-                color: Colors.grey,
+                color: Colors.black87,
                 fontWeight: FontWeight.w400,
                 fontSize: 16,
               ),
@@ -65,9 +65,9 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                statWidget("Groups", "1"),
-                statWidget("Friends", "1"),
-                statWidget("Tables", "7"),
+                statWidget("Groups", "0"),
+                statWidget("Friends", "0"),
+                statWidget("Tables", "0"),
                 // Expanded(
                 //   child: Column(
                 //     children: [
@@ -155,21 +155,107 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
                 color: Colors.black87,
               ),
             ),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+            Container(
+              width: 600,
+              height: 265,
+              decoration: BoxDecoration(
+                color: Colors.lightGreen.shade600,
+                border: Border.all(
+                  color: Colors.black,
+                  width: 5,
                 ),
-                // itemCount: AssetImage.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/logo1.png'),
+                borderRadius: BorderRadius.circular(10),
+                gradient: LinearGradient(
+                  colors: [Colors.lightGreen.shade600, Colors.amber],
+                ),
+              ),
+              child: const SingleChildScrollView(
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "How to use Let's Eat!\n",
+                        style: TextStyle(
+                            fontSize: 20,
+                            decoration: TextDecoration.underline,
+                            decorationThickness: 1),
                       ),
-                    ),
-                  );
-                },
+                      TextSpan(
+                        text: "\n",
+                      ),
+                      TextSpan(
+                        text:
+                            "1. Enter City, State, and Zipcode on Settings Page\n",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      TextSpan(
+                        text: "\n",
+                      ),
+                      TextSpan(
+                        text: "2. Add friends if desired on Friends Page\n",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      TextSpan(
+                        text: "\n",
+                      ),
+                      TextSpan(
+                        text:
+                            "3. Set your own Preferences for food from 0-10 on the Preferences Page and press Save Preferences\n",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      TextSpan(
+                        text: "\n",
+                      ),
+                      TextSpan(
+                        text:
+                            "4. Navigate to Tables Page and click Start New Table\n",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      TextSpan(
+                        text: "\n",
+                      ),
+                      TextSpan(
+                        text:
+                            "5. Name your table, add any Friends you'd like and click Create Table\n",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      TextSpan(
+                        text: "\n",
+                      ),
+                      TextSpan(
+                        text:
+                            "6. Navigate back to Tables Page and click on your Newly created Tables name\n",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      TextSpan(
+                        text: "\n",
+                      ),
+                      TextSpan(
+                        text:
+                            "7. Click Find a Restaurant and sit back while your meals decided for you!\n",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                  // Expanded(
+                  //   child: GridView.builder(
+                  //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  //       crossAxisCount: 2,
+                  //     ),
+                  //     // itemCount: AssetImage.length,
+                  //     itemBuilder: (context, index) {
+                  //       return Container(
+                  //         decoration: const BoxDecoration(
+                  //           image: DecorationImage(
+                  //             image: AssetImage('assets/images/logo1.png'),
+                  //           ),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
+                ),
               ),
             ),
           ],
