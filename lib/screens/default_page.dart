@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lets_eat/screens/stat_widget.dart';
+
+import '../screens/stat_widget.dart';
+
+import '../models/le_user.dart';
+
+import '../providers/leuser.dart';
 
 class DefaultPage extends ConsumerStatefulWidget {
   const DefaultPage({Key? key}) : super(key: key);
@@ -10,6 +15,8 @@ class DefaultPage extends ConsumerStatefulWidget {
 }
 
 class _DefaultPageState extends ConsumerState<DefaultPage> {
+  late LEUser user = ref.watch(leUserProvider);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,28 +41,19 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
               height: 12,
             ),
             const Text(
-              "Holberton",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            // Text(
-            //   "User",
-            //   style: TextStyle(
-            //     color: Colors.pink,
-            //     fontWeight: FontWeight.bold,
-            //     fontSize: 18,
-            //   ),
-            // ),
-            // ),
-            const Text(
-              "Welcome",
+              "Welcome!",
               style: TextStyle(
                 color: Colors.black87,
                 fontWeight: FontWeight.w400,
                 fontSize: 16,
+              ),
+            ),
+            Text(
+              user.username,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
             ),
             const SizedBox(
@@ -65,86 +63,17 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                statWidget("Groups", "0"),
-                statWidget("Friends", "0"),
-                statWidget("Tables", "0"),
-                // Expanded(
-                //   child: Column(
-                //     children: [
-                //       Text(
-                //         "Followers",
-                //         style: TextStyle(
-                //           fontWeight: FontWeight.bold,
-                //           fontSize: 18,
-                //         ),
-                //       ),
-                //       Text(
-                //         "1",
-                //         style: TextStyle(
-                //           fontSize: 16,
-                //           color: Colors.black,
-                //         ),
-                //       )
-                //     ],
-                //   ),
-                // ),
-              ],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  // style: ButtonStyle(
-                  //   overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                  //       (Set<MaterialState> states) {
-                  //     // if (states.contains(MaterialState.focused))
-                  //     //   return Colors.red;
-                  //     // if (states.contains(MaterialState.hovered))
-                  //     //     return Colors.green;
-                  //     if (states.contains(MaterialState.pressed))
-                  //       return Colors.white10;
-                  //     return null;
-                  //     // Defer to the widget's default.
-                  //   }),
-                  // ),
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.lightGreen.shade600,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 50,
-                      vertical: 8,
-                    ),
-                    textStyle: const TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  child: const Text('Follow'),
-                  // color: Colors.black,
-                  // child: Text(
-                  //   "Follow",
-                  //   style: TextStyle(color: Colors.white),
-                  // ),
-                  // padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                TextButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.lightGreen.shade600,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 50,
-                      vertical: 8,
-                    ),
-                  ),
-                  child: const Text("Message"),
-                ),
+                if (user.userCity == '' || 
+                    user.userState == '' ||
+                    user.userZip == '')
+                  statWidget("Location", "no location set"),
+                if (user.userCity != '' &&
+                    user.userState != '' &&
+                    user.userZip != '')
+                  statWidget("Location",
+                             "${user.userCity}, ${user.userState} ${user.userZip}"),
+                statWidget("Friends", "${user.friends.length}"),
+                statWidget("Tables", "${user.tables.length}"),
               ],
             ),
             const Padding(
@@ -238,29 +167,12 @@ class _DefaultPageState extends ConsumerState<DefaultPage> {
                     ],
                   ),
                   textAlign: TextAlign.center,
-                  // Expanded(
-                  //   child: GridView.builder(
-                  //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  //       crossAxisCount: 2,
-                  //     ),
-                  //     // itemCount: AssetImage.length,
-                  //     itemBuilder: (context, index) {
-                  //       return Container(
-                  //         decoration: const BoxDecoration(
-                  //           image: DecorationImage(
-                  //             image: AssetImage('assets/images/logo1.png'),
-                  //           ),
-                  //         ),
-                  //       );
-                  //     },
-                  //   ),
-                  // ),
                 ),
               ),
             ),
           ],
         ),
-      ),
+      )
     );
   }
 }

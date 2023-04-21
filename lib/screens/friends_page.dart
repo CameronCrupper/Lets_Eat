@@ -39,20 +39,6 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
         ),
         child: Column(
           children: [
-            // Container(
-            //   child: Image.asset('assets/images/LetsEatLogo.png',
-            //       height: 300, width: 200),
-            // ),
-
-            // Theme(
-            //   data:
-            //       Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.black),
-            //   child: Scaffold(),
-            // ),
-            // Hero(
-            //     tag: 'image1',
-            //     child: Image.asset('assets/images/Logo1.png')
-            // ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -64,7 +50,6 @@ class _FriendsPageState extends ConsumerState<FriendsPage> {
               },
               child: const Text('Find New Friends'),
             ),
-            const Text('Here is your list of friends'),
             Expanded(
               child: ListView.builder(
                 itemCount: currentLEUser.friends.length,

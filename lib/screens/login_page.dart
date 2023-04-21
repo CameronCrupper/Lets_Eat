@@ -77,9 +77,6 @@ class _LoginState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightGreen.shade600,
-      // appBar: AppBar(
-      //   title: const Text("Login Page"),
-      // ),
       body: SizedBox(
         width: double.infinity,
         child: Column(
@@ -89,21 +86,6 @@ class _LoginState extends ConsumerState<LoginPage> {
               image: AssetImage('assets/images/LetsEatLogo.png'),
               width: 200,
             ),
-            // SizedBox(
-            //   height: 50,
-            // ),
-            // body: SingleChildScrollView(
-            //   child: Column(
-            //     children: <Widget>[
-            //       Padding(
-            //         padding: const EdgeInsets.only(top: 10.0),
-            //         child: Center(
-            //           child: SizedBox(
-            //               width: 700,
-            //               height: 400,
-            //               child: Image.asset('assets/images/LetsEatLogo.png')),
-            //         ),
-            //       ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
@@ -132,6 +114,9 @@ class _LoginState extends ConsumerState<LoginPage> {
                 controller: _passwordController,
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -155,15 +140,9 @@ class _LoginState extends ConsumerState<LoginPage> {
                 ),
               ],
             ),
-            // TextButton(
-            //   onPressed: () {
-            //
-            //   },
-            //   // child: const Text(
-            //   //   'Forgot Password',
-
-            //   // ),
-            // ),
+            const SizedBox(
+              height: 20
+            ),
             Container(
               height: 50,
               width: 250,
@@ -180,6 +159,9 @@ class _LoginState extends ConsumerState<LoginPage> {
                   style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
               ),
+            ),
+            const SizedBox(
+              height: 10
             ),
             // GOOGLE SIGN IN BUTTON
             SignInButton(

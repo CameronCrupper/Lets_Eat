@@ -18,22 +18,17 @@ class TablesPage extends ConsumerStatefulWidget {
 
 class _TablesPageState extends ConsumerState<TablesPage> {
   late LEUser user = ref.watch(leUserProvider);
-  // late String uid = ref.watch(uidProvider);
-  // late List<dynamic> tables = ref.watch(tablesProvider);
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getTable(String table) async {
     final tableInfo =
         await FirebaseFirestore.instance.collection('tables').doc(table).get();
     return tableInfo;
   }
-
-  // void updateTables() {
-  //   FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(uid)
-  //       .update({'tables': tables});
-  //   ref.read(tablesProvider.notifier).updateTables(tables);
-  // }
 
   @override
   Widget build(BuildContext context) {

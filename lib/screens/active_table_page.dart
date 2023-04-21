@@ -230,7 +230,7 @@ class _ActiveTablePageState extends ConsumerState<ActiveTablePage> {
                         if (winningRestaurant.streetAddress != '')
                           Text('${winningRestaurant.streetAddress}'),
                         Text('${winningRestaurant.cityStateZip}'),
-                        Text('${winningRestaurant.phoneNumber}'),
+                        Text(winningRestaurant.phoneNumber),
                         const Text('Categories:'),
                         for (var category in winningRestaurant.categories)
                           Text(category),

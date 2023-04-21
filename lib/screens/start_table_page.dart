@@ -72,7 +72,6 @@ class _StartTablePageState extends ConsumerState<StartTablePage> {
         ),
         child: Scaffold(
           appBar: AppBar(
-            // backgroundColor: Colors.transparent,
             leading: const BackButton(),
             title: const Text(
               'New Table',
