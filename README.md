@@ -4,7 +4,7 @@ This app was created as our final project at Holberton Tulsa. We came up with ev
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project was create Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
 
